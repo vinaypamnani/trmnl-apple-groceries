@@ -1,0 +1,60 @@
+#
+# Plugin definition uploaded to TRMNL by `trmnlp push`.
+# Note: `trmnlp pull` overwrites this file with the server's copy.
+#
+---
+strategy: webhook
+no_screen_padding: 'no'
+dark_mode: 'no'
+static_data: ''
+polling_verb: get
+polling_url: ''
+polling_headers: ''
+polling_body: ''
+id: ecec4609-aaab-4087-b08b-4448514111cb
+name: Apple Grocery Reminders
+refresh_interval: 60
+custom_fields:
+- keyname: about
+  name: About This Plugin
+  field_type: author_bio
+  description: Show your Apple Reminders grocery list on TRMNL. Feed it from the TRMNL Companion iOS app (recommended, no setup) or an Apple Shortcut.
+  github_url: https://github.com/vinaypamnani/trmnl-apple-plugin
+- keyname: webhook_url
+  field_type: copyable_webhook_url
+  name: Webhook URL
+  description: For the Apple Shortcut method, POST your list here. The Companion app does not need this — just select this plugin inside the app.
+  help_text: This will populate once the plugin has been created/saved.
+- keyname: right_label
+  field_type: select
+  options:
+    - "Attribution"
+    - "Your Name"
+    - "Blank"
+  default: attribution
+  name: Right Label
+  description: What do you want shown on the right of the title bar?
+- keyname: show_flags
+  field_type: select
+  options:
+    - "Yes"
+    - "No"
+  default: "yes"
+  name: Show Flags
+  description: "Show a flag icon for flagged items. Shortcut method only - the Companion app sends no flag data."
+- keyname: title_lines
+  field_type: number
+  default: 1
+  min: 1
+  max: 4
+  name: Title Lines
+  description: How many maximum lines do you want item names to wrap over?
+- keyname: font_size
+  field_type: select
+  options:
+    - "Regular"
+    - "Large"
+    - "Extra Large"
+  default: large
+  name: Font Size
+  description: 'Overall text size. Larger sizes are easier to read from a distance but show fewer items before "and N more".'

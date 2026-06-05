@@ -1,0 +1,40 @@
+# TRMNLP local dev-server configuration (NOT uploaded to TRMNL).
+# {{ env.VARIABLE }} interpolation is available here.
+# Docs: https://github.com/usetrmnl/trmnlp
+---
+# Auto-reload the preview when these change.
+watch:
+  - .trmnlp.yml
+  - src
+
+# Values for the custom fields defined in src/settings.yml.
+custom_fields:
+  right_label: attribution
+  show_flags: 'yes'
+  title_lines: 1
+  font_size: large
+
+# Sample webhook data for the local preview (`trmnlp serve`).
+# This mimics the TRMNL Companion app payload (pending-only `reminders`).
+# To preview the Apple Shortcut view instead, comment out `reminders` and supply
+# `pending:` / `completed:` arrays of { n, o, f } items.
+variables:
+  trmnl:
+    plugin_settings:
+      instance_name: Apple Grocery Reminders
+    user:
+      name: Vinay Pamnani
+      locale: en
+  reminders:
+    - { title: Gatorade, notes: '', list_name: Grocery List }
+    - { title: Chicken thighs, notes: 'boneless, skinless', list_name: Grocery List }
+    - { title: Garam masala, notes: '', list_name: Grocery List }
+    - { title: Whole milk, notes: '2% if no whole', list_name: Grocery List }
+    - { title: Bananas, notes: '', list_name: Grocery List }
+    - { title: Sourdough loaf, notes: '', list_name: Grocery List }
+    - { title: Baby spinach, notes: '', list_name: Grocery List }
+    - { title: Greek yogurt, notes: 'plain, full fat', list_name: Grocery List }
+    - { title: Olive oil, notes: '', list_name: Grocery List }
+    - { title: Cheddar cheese, notes: '', list_name: Grocery List }
+    - { title: Coffee beans, notes: '', list_name: Grocery List }
+    - { title: Roma tomatoes, notes: '', list_name: Grocery List }

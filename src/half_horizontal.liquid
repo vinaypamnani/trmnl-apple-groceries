@@ -1,0 +1,91 @@
+{% liquid
+assign font_size = trmnl.plugin_settings.custom_fields_values.font_size | default: "large"
+case font_size
+when "regular"
+assign ui_scale = "1"
+when "extra_large"
+assign ui_scale = "1.25"
+else
+assign ui_scale = "1.125"
+endcase
+
+case trmnl.plugin_settings.custom_fields_values.show_flags
+when "no"
+assign show_flags = false
+else
+assign show_flags = true
+endcase
+
+# Prefer the Shortcut (pending/completed); fall back to Companion reminders.
+if pending or completed
+assign pending_items = pending
+assign show_completed = true
+assign pending_label = "Pending"
+else
+assign pending_items = reminders
+assign show_completed = false
+assign pending_label = reminders.first.list_name | default: "Groceries"
+endif
+%}
+
+<div class="layout layout--row layout--top" style="--ui-scale: {{ ui_scale }};">
+  <div class="columns gap--small" style="height: 100%; align-items: stretch;">
+
+    <div class="column" style="flex: {% if show_completed %}2{% else %}1{% endif %} 1 0; justify-content: flex-start;">
+      <div class="bg--backdrop p--1 text--center" style="border-radius: 8px;">
+        <span class="title title--small text--white" style="color: #fff; text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;">{{ pending_label }}</span>
+      </div>
+      {% if pending_items == empty %}
+      <span class="description">All shopped!</span>
+      {% else %}
+      <div class="columns gap--medium" data-overflow-max-cols="2" data-overflow-counter="true">
+        <div class="column">
+          {% for item in pending_items %}
+          {% assign name = item.title | default: item.n %}
+          <div class="item">
+            <div class="meta">
+              {% if show_flags and item.f %}
+              <span class="index">⚑</span>
+              {% endif %}
+            </div>
+            <div class="content" style="flex: 1 1 0; min-width: 0;">
+              <span class="title title--small" style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; width: 100%;">{{ name }}</span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if show_completed %}
+    <div class="column" data-list-limit="true" data-list-hidden-count="true" style="flex: 1 1 0; justify-content: flex-start;">
+      <div class="bg--backdrop p--1 text--center" style="border-radius: 8px;">
+        <span class="title title--small text--white" style="color: #fff; text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;">Completed</span>
+      </div>
+      {% if completed == empty %}
+      <span class="description">Nothing in cart yet.</span>
+      {% else %}
+      {% for item in completed %}
+      <div class="item">
+        <div class="content" style="flex: 1 1 0; min-width: 0;">
+          <span class="title title--small" style="text-decoration: line-through; opacity: 0.6; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; width: 100%;">✓ {{ item.n }}</span>
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<div class="title_bar">
+  <span class="title">🛒 {{ trmnl.plugin_settings.instance_name }}</span>
+  {% case trmnl.plugin_settings.custom_fields_values.right_label %}
+  {% when "attribution" %}
+  <span class="instance">Apple Groceries</span>
+  {% when "your_name" %}
+  <span class="instance">{{ trmnl.user.name }}</span>
+  {% endcase %}
+</div>

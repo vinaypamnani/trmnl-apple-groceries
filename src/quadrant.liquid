@@ -1,0 +1,60 @@
+{% liquid
+assign font_size = trmnl.plugin_settings.custom_fields_values.font_size | default: "large"
+case font_size
+when "regular"
+assign ui_scale = "1"
+when "extra_large"
+assign ui_scale = "1.25"
+else
+assign ui_scale = "1.125"
+endcase
+
+case trmnl.plugin_settings.custom_fields_values.show_flags
+when "no"
+assign show_flags = false
+else
+assign show_flags = true
+endcase
+
+# Prefer the Shortcut (pending/completed); fall back to Companion reminders.
+if pending or completed
+assign pending_items = pending
+assign show_completed = true
+assign pending_label = "Pending"
+else
+assign pending_items = reminders
+assign show_completed = false
+assign pending_label = reminders.first.list_name | default: "Groceries"
+endif
+%}
+
+<div class="layout layout--col layout--top" style="--ui-scale: {{ ui_scale }};">
+  <div class="columns" style="height: 100%; align-items: stretch;">
+    <div class="column" data-list-limit="true" data-list-hidden-count="true" style="justify-content: flex-start;">
+      <div class="bg--backdrop p--1 text--center" style="border-radius: 8px;">
+        <span class="title title--small text--white" style="color: #fff; text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;">{{ pending_label }}</span>
+      </div>
+      {% if pending_items == empty %}
+      <span class="description">All shopped!</span>
+      {% else %}
+      {% for item in pending_items %}
+      {% assign name = item.title | default: item.n %}
+      <div class="item">
+        <div class="content" style="flex: 1 1 0; min-width: 0;">
+          <span class="title title--small" style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; width: 100%;">{% if show_flags and item.f %}⚑ {% endif %}{{ name }}</span>
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="title_bar">
+  <span class="title">🛒 {{ trmnl.plugin_settings.instance_name }}</span>
+  {% if show_completed %}
+  <span class="instance">✓ {{ completed | size }} done</span>
+  {% else %}
+  <span class="instance">{{ pending_items | size }} to buy</span>
+  {% endif %}
+</div>

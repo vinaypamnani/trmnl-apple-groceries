@@ -1,0 +1,101 @@
+{% liquid
+assign title_lines = trmnl.plugin_settings.custom_fields_values.title_lines | default: 1
+
+assign font_size = trmnl.plugin_settings.custom_fields_values.font_size | default: "large"
+case font_size
+when "regular"
+assign ui_scale = "1"
+when "extra_large"
+assign ui_scale = "1.25"
+else
+assign ui_scale = "1.125"
+endcase
+
+case trmnl.plugin_settings.custom_fields_values.show_flags
+when "no"
+assign show_flags = false
+else
+assign show_flags = true
+endcase
+
+# Two input sources. Prefer the Shortcut (pending/completed is the superset
+# feature); fall back to the Companion app's reminders only when neither is sent.
+if pending or completed
+assign pending_items = pending
+assign show_completed = true
+assign pending_label = "Pending"
+else
+assign pending_items = reminders
+assign show_completed = false
+assign pending_label = reminders.first.list_name | default: "Groceries"
+endif
+%}
+
+<div class="layout layout--row layout--top" style="--ui-scale: {{ ui_scale }};">
+  <div class="columns gap--medium" style="height: 100%; align-items: stretch;">
+
+    <div class="column" style="flex: {% if show_completed %}2{% else %}1{% endif %} 1 0; justify-content: flex-start;">
+      <div class="bg--backdrop p--1 text--center" style="border-radius: 8px;">
+        <span class="title text--white" style="color: #fff; text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;">{{ pending_label }}</span>
+      </div>
+      {% if pending_items == empty %}
+      <div class="flex flex--col h--56 lg:h--80 gap--space-between text--center">
+        <span class="title lg:title--large">All shopped!</span>
+        <span class="description lg:description--large">Nothing left to buy.</span>
+      </div>
+      {% else %}
+      <div class="columns gap--large" data-overflow-max-cols="2" data-overflow-counter="true">
+        <div class="column">
+          {% for item in pending_items %}
+          {% assign name = item.title | default: item.n %}
+          {% assign note = item.notes | default: item.o %}
+          <div class="item">
+            <div class="meta">
+              {% if show_flags and item.f %}
+              <span class="index">⚑</span>
+              {% endif %}
+            </div>
+            <div class="content" style="flex: 1 1 0; min-width: 0;">
+              <span class="title title--small" style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: {{ title_lines }}; overflow: hidden; width: 100%;">{{ name }}</span>
+              {% if note != blank %}
+              <span class="description" style="word-break: normal;">{{ note }}</span>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if show_completed %}
+    <div class="column" data-list-limit="true" data-list-hidden-count="true" style="flex: 1 1 0; justify-content: flex-start;">
+      <div class="bg--backdrop p--1 text--center" style="border-radius: 8px;">
+        <span class="title text--white" style="color: #fff; text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;">Completed</span>
+      </div>
+      {% if completed == empty %}
+      <span class="description">Nothing in cart yet.</span>
+      {% else %}
+      {% for item in completed %}
+      <div class="item">
+        <div class="content" style="flex: 1 1 0; min-width: 0;">
+          <span class="title title--small" style="text-decoration: line-through; opacity: 0.6; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; width: 100%;">✓ {{ item.n }}</span>
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<div class="title_bar">
+  <span class="title">🛒 {{ trmnl.plugin_settings.instance_name }}</span>
+  {% case trmnl.plugin_settings.custom_fields_values.right_label %}
+  {% when "attribution" %}
+  <span class="instance">Apple Groceries</span>
+  {% when "your_name" %}
+  <span class="instance">{{ trmnl.user.name }}</span>
+  {% endcase %}
+</div>
