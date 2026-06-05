@@ -1,15 +1,7 @@
+{% render "shared" %}
 {% liquid
 assign title_lines = trmnl.plugin_settings.custom_fields_values.title_lines | default: 1
-
 assign font_size = trmnl.plugin_settings.custom_fields_values.font_size | default: "large"
-case font_size
-when "regular"
-assign ui_scale = "1"
-when "extra_large"
-assign ui_scale = "1.25"
-else
-assign ui_scale = "1.125"
-endcase
 
 case trmnl.plugin_settings.custom_fields_values.show_flags
 when "no"
@@ -18,8 +10,8 @@ else
 assign show_flags = true
 endcase
 
-# Two input sources. Prefer the Shortcut (pending/completed is the superset
-# feature); fall back to the Companion app's reminders only when neither is sent.
+# Prefer the Shortcut (pending/completed is the superset); fall back to the
+# Companion app's reminders (pending-only) when neither is sent.
 if pending or completed
 assign pending_items = pending
 assign show_completed = true
@@ -31,12 +23,12 @@ assign pending_label = reminders.first.list_name | default: "Groceries"
 endif
 %}
 
-<div class="layout layout--row layout--top" style="--ui-scale: {{ ui_scale }};">
-  <div class="columns gap--medium" style="height: 100%; align-items: stretch;">
+<div class="layout layout--row layout--top g-scale-{{ font_size }} g-clamp{{ title_lines }}">
+  <div class="columns gap--medium g-cols">
 
-    <div class="column" style="flex: {% if show_completed %}2{% else %}1{% endif %} 1 0; justify-content: flex-start;">
-      <div class="bg--backdrop p--1 text--center" style="border-radius: 8px;">
-        <span class="title text--white" style="color: #fff; text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;">{{ pending_label }}</span>
+    <div class="column g-top {% if show_completed %}g-flex2{% else %}g-flex1{% endif %}">
+      <div class="bg--backdrop p--1 text--center g-pill">
+        <span class="title text--white g-pill-text">{{ pending_label }}</span>
       </div>
       {% if pending_items == empty %}
       <div class="flex flex--col h--56 lg:h--80 gap--space-between text--center">
@@ -55,10 +47,10 @@ endif
               <span class="index">⚑</span>
               {% endif %}
             </div>
-            <div class="content" style="flex: 1 1 0; min-width: 0;">
-              <span class="title title--small" style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: {{ title_lines }}; overflow: hidden; width: 100%;">{{ name }}</span>
+            <div class="content g-content">
+              <span class="title title--small g-name">{{ name }}</span>
               {% if note != blank %}
-              <span class="description" style="word-break: normal;">{{ note }}</span>
+              <span class="description g-note">{{ note }}</span>
               {% endif %}
             </div>
           </div>
@@ -69,17 +61,17 @@ endif
     </div>
 
     {% if show_completed %}
-    <div class="column" data-list-limit="true" data-list-hidden-count="true" style="flex: 1 1 0; justify-content: flex-start;">
-      <div class="bg--backdrop p--1 text--center" style="border-radius: 8px;">
-        <span class="title text--white" style="color: #fff; text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;">Completed</span>
+    <div class="column g-top g-flex1" data-list-limit="true" data-list-hidden-count="true">
+      <div class="bg--backdrop p--1 text--center g-pill">
+        <span class="title text--white g-pill-text">Completed</span>
       </div>
       {% if completed == empty %}
       <span class="description">Nothing in cart yet.</span>
       {% else %}
       {% for item in completed %}
       <div class="item">
-        <div class="content" style="flex: 1 1 0; min-width: 0;">
-          <span class="title title--small" style="text-decoration: line-through; opacity: 0.6; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; width: 100%;">✓ {{ item.n }}</span>
+        <div class="content g-content">
+          <span class="title title--small text--muted g-done g-name">✓ {{ item.n }}</span>
         </div>
       </div>
       {% endfor %}

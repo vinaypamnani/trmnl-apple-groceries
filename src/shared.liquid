@@ -1,4 +1,47 @@
 {%- comment -%}
-Reusable markup shared across layouts. Include with {% render "shared" %}.
-Currently unused — each layout is self-contained.
+Shared styles for all layouts. Rendered once at the top of each via
+{% render "shared" %}. Compound selectors (.column.g-*, .columns.g-*,
+.title.g-*) tie the TRMNL framework's specificity and win on source order
+(this <style> loads after the framework CSS). Plain classes are used only for
+properties the framework leaves unset (line-clamp, min-width, etc.).
 {%- endcomment -%}
+<style>
+  /* layout sizing */
+  .columns.g-cols { height: 100%; align-items: stretch; }
+  .columns.g-half { flex: 1 1 0; min-height: 0; overflow: hidden; }
+  .column.g-top { justify-content: flex-start; }
+  .column.g-flex2 { flex: 2 1 0; }
+  .column.g-flex1 { flex: 1 1 0; }
+
+  /* item content fills the column so names use the full width */
+  .g-content { flex: 1 1 0; min-width: 0; }
+
+  /* item name: clamp to N lines (N from --clamp on the layout root) */
+  .g-name {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--clamp, 1);
+    overflow: hidden;
+    width: 100%;
+  }
+  .g-done { text-decoration: line-through; }
+  .description.g-note { word-break: normal; }
+
+  /* outlined header pill text (white fill, black keyline) */
+  .g-pill { border-radius: 8px; }
+  .title.g-pill-text {
+    color: #fff;
+    text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;
+  }
+
+  /* Font Size setting -> overall UI scale */
+  .g-scale-regular { --ui-scale: 1; }
+  .g-scale-large { --ui-scale: 1.125; }
+  .g-scale-extra_large { --ui-scale: 1.25; }
+
+  /* Title Lines setting -> clamp count */
+  .g-clamp1 { --clamp: 1; }
+  .g-clamp2 { --clamp: 2; }
+  .g-clamp3 { --clamp: 3; }
+  .g-clamp4 { --clamp: 4; }
+</style>

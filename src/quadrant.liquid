@@ -1,13 +1,6 @@
+{% render "shared" %}
 {% liquid
 assign font_size = trmnl.plugin_settings.custom_fields_values.font_size | default: "large"
-case font_size
-when "regular"
-assign ui_scale = "1"
-when "extra_large"
-assign ui_scale = "1.25"
-else
-assign ui_scale = "1.125"
-endcase
 
 case trmnl.plugin_settings.custom_fields_values.show_flags
 when "no"
@@ -28,11 +21,11 @@ assign pending_label = reminders.first.list_name | default: "Groceries"
 endif
 %}
 
-<div class="layout layout--col layout--top" style="--ui-scale: {{ ui_scale }};">
-  <div class="columns" style="height: 100%; align-items: stretch;">
-    <div class="column" data-list-limit="true" data-list-hidden-count="true" style="justify-content: flex-start;">
-      <div class="bg--backdrop p--1 text--center" style="border-radius: 8px;">
-        <span class="title title--small text--white" style="color: #fff; text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;">{{ pending_label }}</span>
+<div class="layout layout--col layout--top g-scale-{{ font_size }}">
+  <div class="columns g-cols">
+    <div class="column g-top" data-list-limit="true" data-list-hidden-count="true">
+      <div class="bg--backdrop p--1 text--center g-pill">
+        <span class="title title--small text--white g-pill-text">{{ pending_label }}</span>
       </div>
       {% if pending_items == empty %}
       <span class="description">All shopped!</span>
@@ -40,8 +33,8 @@ endif
       {% for item in pending_items %}
       {% assign name = item.title | default: item.n %}
       <div class="item">
-        <div class="content" style="flex: 1 1 0; min-width: 0;">
-          <span class="title title--small" style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; width: 100%;">{% if show_flags and item.f %}⚑ {% endif %}{{ name }}</span>
+        <div class="content g-content">
+          <span class="title title--small g-name">{% if show_flags and item.f %}⚑ {% endif %}{{ name }}</span>
         </div>
       </div>
       {% endfor %}
