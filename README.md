@@ -62,6 +62,25 @@ secret named `TRMNL_API_KEY` to enable it.
 
 ## Connect your data — pick one method
 
+Both feed the same layouts; they differ in setup effort and how much data they
+send. The Shortcut is a **superset** — it adds the Completed ("in cart") column
+and flags.
+
+| | **Companion app** (Option A) | **Apple Shortcut** (Option B) |
+| --- | --- | --- |
+| Setup | Install app, toggle a list on — done | Import a Shortcut, paste webhook URL, set up automations |
+| Sends | `reminders` (incomplete only) | `pending` **and** `completed`, with notes + flags |
+| Completed column | ❌ no | ✅ yes ("Pending / Completed" cart view) |
+| Flag icons (⚑) | ❌ not in payload | ✅ when **Show Flags** is on |
+| Item notes | ✅ yes | ✅ yes |
+| Updates | Automatic, in the background | Only when the Shortcut runs (manual or via automation) |
+| Payload limit | Handled by the app | You stay under TRMNL's **2 kB** webhook limit |
+| Best for | Set-and-forget "to buy" list | A live cart showing what's checked off too |
+
+> Pick **one.** The layouts always prefer the Shortcut's `pending`/`completed`
+> and only fall back to the Companion's `reminders` when neither is present — so
+> if both ever send data, the Shortcut view takes precedence.
+
 ### Option A · Companion app (recommended, no Shortcut)
 1. Install [TRMNL Companion](https://apps.apple.com/us/app/trmnl-companion/id6752111280).
 2. In the app's **Plugins** tab, pull to refresh, select this plugin, grant
@@ -73,8 +92,20 @@ display is a live "to buy" list (no Completed column, no flags — that data isn
 in the Companion payload).
 
 ### Option B · Apple Shortcut (adds the Completed column)
-Build a Shortcut that POSTs to the plugin's **Webhook URL** (shown in the plugin
-settings). Send both lists, newest-completed first:
+
+**Quick start — import the prebuilt Shortcut:**
+
+1. In this plugin's settings, open the **Apple Shortcut** field and tap the link
+   on your iPhone to **Add Shortcut**.
+2. On import it asks for your **Webhook URL** — paste the one from this plugin's
+   settings (the Option B field).
+3. Run it manually, or attach a Home Screen widget / Personal Automation so it
+   syncs on a schedule. It POSTs your pending + recently-completed items.
+
+Prefer to build it yourself, or want to see exactly what it does? The full
+step-by-step actions are in [`docs/apple-shortcut.md`](docs/apple-shortcut.md).
+Either way, the Shortcut POSTs this shape to your Webhook URL, newest-completed
+first:
 
 ```json
 {
@@ -97,11 +128,12 @@ under TRMNL's **2 kB** webhook limit (~40 pending + 12 completed is comfortable)
 
 | Field | Effect |
 | --- | --- |
-| Webhook URL | POST target for the Shortcut method (Companion doesn't need it). |
-| Right Label | Title-bar right side: Attribution, Your Name, or Blank. |
-| Show Flags | Flag icon for flagged items. **Shortcut only.** |
-| Title Lines | Max lines an item name wraps over (1–4); Full layout. |
+| Apple Shortcut *(optional)* | Copyable iCloud link to import the prebuilt Shortcut. **Shortcut only.** |
+| Webhook URL *(optional)* | POST target for the Shortcut method (Companion doesn't need it). |
+| Show Flags *(optional)* | Flag icon for flagged items. **Shortcut only.** |
 | Font Size | Regular / **Large** (default) / Extra Large — scales the whole layout. |
+| Title Lines | Max lines an item name wraps over (1–4); Full layout. |
+| Title-Bar Label | Title-bar right side: Attribution, Your Name, or Blank. |
 
 ## Project structure
 
