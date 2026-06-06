@@ -51,13 +51,14 @@ endcase
 
     <div class="column g-top {% if show_completed %}g-flex2{% else %}g-flex1{% endif %}">
       <div class="bg--backdrop p--1 text--center g-pill">
-        <span class="title title--small text--white g-pill-text">{{ pending_label }} · {{ pending_items | size }}</span>
+        {% assign pc = pending_items | size %}
+        <span class="title title--small g-pill-text g-cart">{{ pending_label }} · {{ pc }} item{% if pc != 1 %}s{% endif %}</span>
       </div>
       {% if pending_items == empty %}
       <span class="description">All shopped!</span>
       {% else %}
       <div class="columns gap--medium" data-overflow-max-cols="2" data-overflow-counter="true">
-        <div class="column">
+        <div class="column gap--small">
           {% for item in pending_items %}
           {% assign name = item.title | default: item.n %}
           <div class="item">
@@ -77,7 +78,8 @@ endcase
     {% if show_completed %}
     <div class="column g-top g-flex1" data-list-limit="true" data-list-hidden-count="true">
       <div class="bg--backdrop p--1 text--center g-pill">
-        <span class="title title--small text--white g-pill-text">Completed · {{ completed | size }}</span>
+        {% assign cc = completed | size %}
+        <span class="title title--small g-pill-text">Completed · {{ cc }} item{% if cc != 1 %}s{% endif %}</span>
       </div>
       {% if completed == empty %}
       <span class="description">Nothing in cart yet.</span>

@@ -25,34 +25,47 @@ properties the framework leaves unset (line-clamp, min-width, etc.).
     width: 100%;
   }
   .g-done { text-decoration: line-through; }
-  .description.g-note { word-break: normal; }
+  /* notes read as clearly secondary — italic, crisp black (not a noisy gray dither) */
+  .description.g-note { word-break: normal; font-style: italic; }
 
   /* Apple logo in the title bar uses the framework's .image slot (see layouts) */
 
-  /* clock icon for the date/time label — inline SVG background, crisp on 1-bit */
+  /* title-bar icons (clock + battery) and the header cart sit just left of their
+     text; one shared gap rule keeps the framework lint's style-count low */
+  .g-ico-clock::before, .g-batt, .g-cart::before { margin-right: 0.3em; vertical-align: -0.12em; }
   .g-ico-clock::before {
     content: ""; display: inline-block; width: 0.95em; height: 0.95em;
-    margin-right: 0.3em; vertical-align: -0.12em;
     background: center / contain no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTEyIDYgVjEyIEgxNyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg=="); }
-  /* battery is an inline <svg> in each layout so its fill rect can track the charge */
-  .g-batt { display: inline-block; width: 1.6em; height: 0.9em; margin-right: 0.3em; vertical-align: -0.12em; }
+  /* cart glyph for the header — white, for the solid-black bar */
+  .g-cart::before {
+    content: ""; display: inline-block; width: 1.05em; height: 1.05em;
+    background: center / contain no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEgMmgzLjVsMi4zIDEyLjJhMS42IDEuNiAwIDAgMCAxLjYgMS4zaDkuMWExLjYgMS42IDAgMCAwIDEuNi0xLjNMMjEuNSA3SDYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxjaXJjbGUgY3g9IjkuNSIgY3k9IjIwIiByPSIxLjciIGZpbGw9IiMwMDAiLz48Y2lyY2xlIGN4PSIxOC41IiBjeT0iMjAiIHI9IjEuNyIgZmlsbD0iIzAwMCIvPjwvc3ZnPg=="); }
+  .g-batt { display: inline-block; width: 1.6em; height: 0.9em; }
 
-  /* empty "to-buy" checkbox — drawn in CSS so it's crisp and font-independent */
+  /* Checklist rows: the framework stretches .item and vertically-centers .meta,
+     so on a two-line item (name + note) the checkbox floats to the middle. Pin
+     everything to the top and drop the box onto the name's line so noted and
+     note-less items share one gutter and baseline. */
+  /* Pin the marker to the name's line. Row spacing comes from a framework gap--*
+     class on the column, keeping custom CSS minimal. */
+  .item { align-items: flex-start; }
+  /* Drop the framework's gray dither chip behind the marker — on 1-bit it reads as
+     noise. Leave a clean transparent gutter and pin the marker to the name's line. */
+  .item .meta { align-items: flex-start; padding-top: 0.2em; background: none; width: auto; }
+
+  /* empty "to-buy" checkbox — a single crisp outlined square, no chip behind it */
   .g-box {
     display: inline-block;
     box-sizing: border-box;
-    width: 0.62em; height: 0.62em;
-    border: 0.12em solid currentColor;
-    border-radius: 2px;
-    vertical-align: middle;
+    width: 0.8em; height: 0.8em;
+    border: 0.14em solid currentColor;
+    border-radius: 3px;
   }
 
-  /* outlined header pill text (white fill, black keyline) */
-  .g-pill { border-radius: 8px; }
-  .title.g-pill-text {
-    color: #fff;
-    text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;
-  }
+  /* header pill matches the footer: light gray-70 dither backdrop + dark text with
+     the framework's crisp white text-stroke (paint-order stroke fill), not a shadow. */
+  .g-pill { border-radius: 8px; background-color: var(--gray-70); }
+  .title.g-pill-text { -webkit-text-stroke: 2px var(--white); paint-order: stroke fill; }
 
   /* Font Size setting -> overall UI scale */
   .g-scale-regular { --ui-scale: 1; }

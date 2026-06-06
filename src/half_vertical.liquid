@@ -51,7 +51,8 @@ endcase
   <div class="columns g-half">
     <div class="column g-top" data-list-limit="true" data-list-hidden-count="true">
       <div class="bg--backdrop p--1 text--center g-pill">
-        <span class="title title--small text--white g-pill-text">{{ pending_label }} · {{ pending_items | size }}</span>
+        {% assign pc = pending_items | size %}
+        <span class="title title--small g-pill-text g-cart">{{ pending_label }} · {{ pc }} item{% if pc != 1 %}s{% endif %}</span>
       </div>
       {% if pending_items == empty %}
       <span class="description">All shopped!</span>
@@ -75,7 +76,8 @@ endcase
   <div class="columns g-half">
     <div class="column g-top" data-list-limit="true" data-list-hidden-count="true">
       <div class="bg--backdrop p--1 text--center g-pill">
-        <span class="title title--small text--white g-pill-text">Completed · {{ completed | size }}</span>
+        {% assign cc = completed | size %}
+        <span class="title title--small g-pill-text">Completed · {{ cc }} item{% if cc != 1 %}s{% endif %}</span>
       </div>
       {% if completed == empty %}
       <span class="description">Nothing in cart yet.</span>
