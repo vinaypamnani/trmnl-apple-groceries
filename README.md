@@ -32,6 +32,15 @@ bin/trmnlp serve     # preview at http://localhost:4567 (live-reloads on save)
 bin/trmnlp lint      # check against TRMNL best practices
 ```
 
+**Windows:** use the `.cmd` wrapper from PowerShell or cmd (same Docker fallback):
+
+```powershell
+bin\trmnlp.cmd serve
+bin\trmnlp.cmd lint
+```
+
+The first run pulls the `trmnl/trmnlp` Docker image (one-time, a few hundred MB).
+
 Edit `src/*.liquid`. Sample data and custom-field values for the preview live in
 `.trmnlp.yml` (defaults to the Companion `reminders` shape; swap in
 `pending`/`completed` to preview the Shortcut view).
