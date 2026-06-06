@@ -128,7 +128,7 @@ def build_actions():
         # Pending: incomplete reminders in the chosen list
         act("is.workflow.actions.filter.reminders",
             {"UUID": U_FP, "WFContentItemFilter": content_filter([list_row(), completed_row(False)]),
-             "WFContentItemSortProperty": "Last Modified Date", "WFContentItemSortOrder": "Oldest First",
+             "WFContentItemSortProperty": "Creation Date", "WFContentItemSortOrder": "Oldest First",
              "WFContentItemLimitEnabled": True, "WFContentItemLimitNumber": 40}),
         act("is.workflow.actions.repeat.each",
             {"UUID": U_RPS, "GroupingIdentifier": G_RP, "WFControlFlowMode": 0,
