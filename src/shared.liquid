@@ -27,6 +27,19 @@ properties the framework leaves unset (line-clamp, min-width, etc.).
   .g-done { text-decoration: line-through; }
   .description.g-note { word-break: normal; }
 
+  /* flagged item: bold name (strongest emphasis available on 1-bit e-ink) */
+  .g-name.g-flagged { font-weight: 700; }
+
+  /* empty "to-buy" checkbox — drawn in CSS so it's crisp and font-independent */
+  .g-box {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 0.62em; height: 0.62em;
+    border: 0.12em solid currentColor;
+    border-radius: 2px;
+    vertical-align: middle;
+  }
+
   /* outlined header pill text (white fill, black keyline) */
   .g-pill { border-radius: 8px; }
   .title.g-pill-text {

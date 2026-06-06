@@ -24,16 +24,19 @@ endif
   <div class="columns g-cols">
     <div class="column g-top" data-list-limit="true" data-list-hidden-count="true">
       <div class="bg--backdrop p--1 text--center g-pill">
-        <span class="title title--small text--white g-pill-text">{{ pending_label }}</span>
+        <span class="title title--small text--white g-pill-text">{{ pending_label }} · {{ pending_items | size }}</span>
       </div>
       {% if pending_items == empty %}
       <span class="description">All shopped!</span>
       {% else %}
       {% for item in pending_items %}
       {% assign name = item.title | default: item.n %}
+      {% assign flagged = false %}
+      {% if show_flags and item.f %}{% assign flagged = true %}{% endif %}
       <div class="item">
+        <div class="meta">{% if flagged %}<span class="index">⚑</span>{% else %}<span class="g-box"></span>{% endif %}</div>
         <div class="content g-content">
-          <span class="title title--small g-name">{% if show_flags and item.f %}⚑ {% endif %}{{ name }}</span>
+          <span class="title title--small g-name{% if flagged %} g-flagged{% endif %}">{{ name }}</span>
         </div>
       </div>
       {% endfor %}

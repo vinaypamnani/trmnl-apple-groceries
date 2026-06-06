@@ -25,7 +25,7 @@ endif
 
     <div class="column g-top {% if show_completed %}g-flex2{% else %}g-flex1{% endif %}">
       <div class="bg--backdrop p--1 text--center g-pill">
-        <span class="title title--small text--white g-pill-text">{{ pending_label }}</span>
+        <span class="title title--small text--white g-pill-text">{{ pending_label }} · {{ pending_items | size }}</span>
       </div>
       {% if pending_items == empty %}
       <span class="description">All shopped!</span>
@@ -34,14 +34,14 @@ endif
         <div class="column">
           {% for item in pending_items %}
           {% assign name = item.title | default: item.n %}
+          {% assign flagged = false %}
+          {% if show_flags and item.f %}{% assign flagged = true %}{% endif %}
           <div class="item">
             <div class="meta">
-              {% if show_flags and item.f %}
-              <span class="index">⚑</span>
-              {% endif %}
+              {% if flagged %}<span class="index">⚑</span>{% else %}<span class="g-box"></span>{% endif %}
             </div>
             <div class="content g-content">
-              <span class="title title--small g-name">{{ name }}</span>
+              <span class="title title--small g-name{% if flagged %} g-flagged{% endif %}">{{ name }}</span>
             </div>
           </div>
           {% endfor %}
@@ -53,15 +53,16 @@ endif
     {% if show_completed %}
     <div class="column g-top g-flex1" data-list-limit="true" data-list-hidden-count="true">
       <div class="bg--backdrop p--1 text--center g-pill">
-        <span class="title title--small text--white g-pill-text">Completed</span>
+        <span class="title title--small text--white g-pill-text">Completed · {{ completed | size }}</span>
       </div>
       {% if completed == empty %}
       <span class="description">Nothing in cart yet.</span>
       {% else %}
       {% for item in completed %}
       <div class="item">
+        <div class="meta"><span class="index">✓</span></div>
         <div class="content g-content">
-          <span class="title title--small text--muted g-done g-name">✓ {{ item.n }}</span>
+          <span class="title title--small text--muted g-done g-name">{{ item.n }}</span>
         </div>
       </div>
       {% endfor %}
