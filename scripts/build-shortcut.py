@@ -179,11 +179,13 @@ def build_plist():
         "WFWorkflowClientVersion": "2700.0.4",
         "WFWorkflowHasOutputFallback": False,
         "WFWorkflowIcon": ICON,
+        # DefaultValue ("Default Answer") is required for the question to show/persist
+        # in the app's Setup tab — verified against an imported shortcut that keeps it.
         "WFWorkflowImportQuestions": [
             {"ActionIndex": 0, "Category": "Parameter", "ParameterKey": "WFTextActionText",
-             "Text": "Paste your TRMNL Webhook URL"},
+             "DefaultValue": "", "Text": "Paste your TRMNL Webhook URL"},
             {"ActionIndex": 2, "Category": "Parameter", "ParameterKey": "WFTextActionText",
-             "Text": "Which Reminders list holds your groceries?"},
+             "DefaultValue": "", "Text": "Which Reminders list holds your groceries?"},
         ],
         "WFWorkflowMinimumClientVersion": 900,
         "WFWorkflowMinimumClientVersionString": "900",
