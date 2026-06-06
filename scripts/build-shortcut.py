@@ -19,7 +19,6 @@ What it produces (see docs/apple-shortcut.md for the human walkthrough):
   Dictionary { pending: [Pending], completed: [Completed] }  (values typed Array)
     -> Set Variable mergeValues
   Get Contents of URL  POST {WebhookURL}  JSON  { merge_variables: {mergeValues} }
-  Notification
 
 Every non-obvious encoding below was verified by extracting a known-good shortcut
 exported from the Shortcuts app (see scripts/extract-shortcut.sh):
@@ -168,8 +167,6 @@ def build_actions():
             {"UUID": U_GET, "WFURL": var_token("WebhookURL"), "WFHTTPMethod": "POST",
              "WFHTTPBodyType": "JSON",
              "WFJSONValues": dict_field([kv("merge_variables", var_token("mergeValues"))])}),
-        act("is.workflow.actions.notification",
-            {"WFNotificationActionTitle": "TRMNL", "WFNotificationActionBody": "Sent to buy to TRMNL"}),
     ]
 
 
