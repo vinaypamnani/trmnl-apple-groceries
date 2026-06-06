@@ -38,10 +38,20 @@ which of two payload shapes it received and adapts:
 - **Companion app** sends a `reminders` array of `{ title, notes, list_name }`
   (incomplete items only) → single "to buy" list, no Completed column.
 
-Each layout opens with a Liquid block that prefers `pending/completed` and falls
-back to `reminders`, normalizing field names with `item.title | default: item.n`
-and `item.notes | default: item.o`. When editing one layout's detection/rendering
-logic, mirror the change across all four — they share this contract, not code.
+Each layout opens with a Liquid block that resolves the source into `use_shortcut`,
+then sets `pending_items` / `show_completed` accordingly, normalizing field names
+with `item.title | default: item.n` and `item.notes | default: item.o`. The
+**List Source** custom field (`list_source`) controls this: `companion` (default)
+and `shortcut` force a view; `auto` detects from the payload (Shortcut wins when
+`pending`/`completed` are present). A forced view that doesn't match the incoming
+data renders empty. When editing one layout's detection/rendering logic, mirror the
+change across all four — they share this contract, not code.
+
+**Conditional fields.** TRMNL select fields support `conditional_validation`
+(`when: <value>` → `hidden: [keynames]` and/or `required: [keynames]`). `list_source`
+uses it to hide `apple_shortcut_url` / `webhook_url` when `companion` is selected
+(shown for `auto` and `shortcut`). Hideable fields are marked `optional: true` so
+the form saves while hidden. This only affects the settings UI, not rendering.
 
 **Shared styles.** `src/shared.liquid` holds all CSS and is auto-prepended to each
 layout by trmnlp (do **not** add `{% render "shared" %}` — that double-renders).
@@ -60,7 +70,8 @@ they raise specificity to beat the TRMNL framework CSS, which loads before this
 
 - `src/settings.yml` — plugin definition **uploaded** by `push`: strategy
   (`webhook`), the live plugin `id` (pushes update this instance, not create new),
-  and `custom_fields` (right_label, custom_label, title_lines, font_size). Note:
+  and `custom_fields` (list_source, right_label, custom_label, title_lines,
+  font_size). Note:
   `trmnlp pull` overwrites this file with the server copy.
 - `.trmnlp.yml` — **local dev only**, not uploaded. Holds sample webhook data for
   the preview. Defaults to the Companion `reminders` shape; comment it out and add

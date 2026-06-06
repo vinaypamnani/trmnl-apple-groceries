@@ -9,6 +9,8 @@ watch:
 
 # Values for the custom fields defined in src/settings.yml.
 custom_fields:
+  # list_source: auto | shortcut | companion
+  list_source: auto
   # right_label: date_and_time | battery | date_time_and_battery | custom | blank
   right_label: date_time_and_battery
   custom_label: Costco run

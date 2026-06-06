@@ -20,10 +20,25 @@ custom_fields:
   field_type: author_bio
   description: Show your Apple Reminders grocery list on TRMNL. Feed it from the TRMNL Companion iOS app (recommended, no setup) or an Apple Shortcut.
   github_url: https://github.com/vinaypamnani/trmnl-apple-groceries
+- keyname: list_source
+  field_type: select
+  options:
+    - "Auto-detect: auto"
+    - "Apple Shortcut: shortcut"
+    - "TRMNL Companion: companion"
+  default: companion
+  name: List Source
+  description: How your groceries reach TRMNL. The Companion app needs no setup; the Apple Shortcut also enables the Completed column. Auto-detect picks the view from the incoming data.
+  conditional_validation:
+    - when: companion
+      hidden:
+        - apple_shortcut_url
+        - webhook_url
 # TODO: replace `value` with the real iCloud link after sharing the Shortcut
 # (Shortcuts app -> Share -> Copy iCloud Link). See docs/apple-shortcut.md.
 - keyname: apple_shortcut_url
   field_type: copyable
+  optional: true
   name: Apple Shortcut (optional)
   value: "https://www.icloud.com/shortcuts/REPLACE_AFTER_SHARING"
   description: |-
@@ -33,6 +48,7 @@ custom_fields:
     your TRMNL stays current. The Companion app doesn't need this.
 - keyname: webhook_url
   field_type: copyable_webhook_url
+  optional: true
   name: Webhook URL (optional)
   description: >-
     Apple Shortcut method only — the Companion app doesn't need this. Import the
@@ -43,9 +59,9 @@ custom_fields:
 - keyname: font_size
   field_type: select
   options:
-    - "Regular"
-    - "Large"
-    - "Extra Large"
+    - "Regular: regular"
+    - "Large: large"
+    - "Extra Large: extra_large"
   default: large
   name: Font Size
   description: 'Overall text size. Larger sizes are easier to read from a distance but show fewer items before "and N more".'
@@ -59,15 +75,25 @@ custom_fields:
 - keyname: right_label
   field_type: select
   options:
-    - "Date and Time"
-    - "Battery"
-    - "Date Time and Battery"
-    - "Custom"
-    - "Blank"
+    - "Date and Time: date_and_time"
+    - "Battery: battery"
+    - "Date Time and Battery: date_time_and_battery"
+    - "Custom: custom"
+    - "Blank: blank"
   default: date_and_time
   name: Title-Bar Label
   description: 'What to show on the right of the title bar. Date/time uses your device''s local time; "Custom" shows the text you enter below.'
+  conditional_validation:
+    - when: date_and_time
+      hidden: [custom_label]
+    - when: battery
+      hidden: [custom_label]
+    - when: date_time_and_battery
+      hidden: [custom_label]
+    - when: blank
+      hidden: [custom_label]
 - keyname: custom_label
   field_type: string
+  optional: true
   name: Custom Title-Bar Text
   description: Shown only when Title-Bar Label is set to "Custom". Leave blank to hide.

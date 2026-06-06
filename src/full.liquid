@@ -2,9 +2,20 @@
 assign title_lines = trmnl.plugin_settings.custom_fields_values.title_lines | default: 1
 assign font_size = trmnl.plugin_settings.custom_fields_values.font_size | default: "large"
 
-# Prefer the Shortcut (pending/completed is the superset); fall back to the
-# Companion app's reminders (pending-only) when neither is sent.
+# List Source: "shortcut" (pending/completed, adds Completed column) or
+# "companion" (reminders only). "auto" (default) detects from the payload —
+# Shortcut wins when its arrays are present.
+assign source = trmnl.plugin_settings.custom_fields_values.list_source | default: "auto"
+assign use_shortcut = false
+if source == "shortcut"
+assign use_shortcut = true
+elsif source == "auto"
 if pending or completed
+assign use_shortcut = true
+endif
+endif
+
+if use_shortcut
 assign pending_items = pending
 assign show_completed = true
 assign pending_label = "Pending"

@@ -77,7 +77,10 @@ send. The Shortcut is a **superset** — it adds the Completed ("in cart") colum
 
 > Pick **one.** The layouts always prefer the Shortcut's `pending`/`completed`
 > and only fall back to the Companion's `reminders` when neither is present — so
-> if both ever send data, the Shortcut view takes precedence.
+> if both ever send data, the Shortcut view takes precedence. The **List Source**
+> setting (below) defaults to **TRMNL Companion**; pick **Apple Shortcut** to reveal
+> the Shortcut/Webhook fields and the Completed column, or **Auto-detect** to choose
+> the view from whatever data arrives.
 
 ### Option A · Companion app (recommended, no Shortcut)
 1. Install [TRMNL Companion](https://apps.apple.com/us/app/trmnl-companion/id6752111280).
@@ -126,6 +129,7 @@ under TRMNL's **2 kB** webhook limit (~40 pending + 12 completed is comfortable)
 
 | Field | Effect |
 | --- | --- |
+| List Source | **TRMNL Companion** (default), **Apple Shortcut**, or **Auto-detect**. Picking Companion hides the Shortcut + Webhook fields below; Apple Shortcut reveals them and enables the Completed column. |
 | Apple Shortcut *(optional)* | Copyable iCloud link to import the prebuilt Shortcut. **Shortcut only.** |
 | Webhook URL *(optional)* | POST target for the Shortcut method (Companion doesn't need it). |
 | Font Size | Regular / **Large** (default) / Extra Large — scales the whole layout. |
