@@ -2,13 +2,6 @@
 assign title_lines = trmnl.plugin_settings.custom_fields_values.title_lines | default: 1
 assign font_size = trmnl.plugin_settings.custom_fields_values.font_size | default: "large"
 
-case trmnl.plugin_settings.custom_fields_values.show_flags
-when "no"
-assign show_flags = false
-else
-assign show_flags = true
-endcase
-
 # Prefer the Shortcut (pending/completed is the superset); fall back to the
 # Companion app's reminders (pending-only) when neither is sent.
 if pending or completed
@@ -20,6 +13,28 @@ assign pending_items = reminders
 assign show_completed = false
 assign pending_label = reminders.first.list_name | default: "Groceries"
 endif
+
+# Title-bar right label: Date & Time / Battery / both / Custom text / Blank.
+# Date & time is rendered in the device's local wall-clock (UTC + the user's offset).
+assign rt_dt = trmnl.system.timestamp_utc | plus: trmnl.user.utc_offset | date: "%b %-d, %-I:%M %p"
+assign batt_pct = trmnl.device.percent_charged | round
+assign batt_fill = batt_pct | times: 16 | divided_by: 100
+assign show_dt = false
+assign show_batt = false
+assign custom_text = ""
+case trmnl.plugin_settings.custom_fields_values.right_label
+when "battery"
+assign show_batt = true
+when "date_time_and_battery"
+assign show_dt = true
+assign show_batt = true
+when "custom"
+assign custom_text = trmnl.plugin_settings.custom_fields_values.custom_label
+when "blank"
+assign show_dt = false
+else
+assign show_dt = true
+endcase
 %}
 
 <div class="layout layout--row layout--top g-scale-{{ font_size }} g-clamp{{ title_lines }}">
@@ -40,14 +55,12 @@ endif
           {% for item in pending_items %}
           {% assign name = item.title | default: item.n %}
           {% assign note = item.notes | default: item.o %}
-          {% assign flagged = false %}
-          {% if show_flags and item.f %}{% assign flagged = true %}{% endif %}
           <div class="item">
             <div class="meta">
-              {% if flagged %}<span class="index">⚑</span>{% else %}<span class="g-box"></span>{% endif %}
+              <span class="g-box"></span>
             </div>
             <div class="content g-content">
-              <span class="title title--small g-name{% if flagged %} g-flagged{% endif %}">{{ name }}</span>
+              <span class="title title--small g-name">{{ name }}</span>
               {% if note != blank %}
               <span class="description g-note">{{ note }}</span>
               {% endif %}
@@ -83,11 +96,9 @@ endif
 </div>
 
 <div class="title_bar">
-  <span class="title">🛒 {{ trmnl.plugin_settings.instance_name }}</span>
-  {% case trmnl.plugin_settings.custom_fields_values.right_label %}
-  {% when "attribution" %}
-  <span class="instance">Apple Groceries</span>
-  {% when "your_name" %}
-  <span class="instance">{{ trmnl.user.name }}</span>
-  {% endcase %}
+  <img class="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABZElEQVR4nN3XsUuXQRgH8I9aSUNIQRgJGa6OTYJDCOUQIS462eLYXxARDhG0FQaCg6CLUVCDcy4uioNLILQ0RA6pGS1FBhYvnPDyQvqev4c38AsP73DHfTju3rv3JS59eIAxDaUDT/Ebf/CoKXgugYc11AR6t4K+R1sT8EoJ/YEbTaBnSuv6Fbc1lHa8xkNciR78Mqawhm18wCwGSn0uYRJvU/seNvECvSdBR/C9snnK9RHr2D+iz0/cz0FHcXDEgLl1pw7ag2+B6ALO1oGfBaJLdd/rNmwFocXaX1cz1wJnuywjg4HwdA5883/B/YHwuxz4YiBcnONXc/BPgfirHHg+EC7qebrJjs14MFzUKrqPgzvTTRQJ7+BcnVk/CYYfq5kufAlCt9OdXTv3guCJHPQwiy2ib5ww5ytfktXb5zN+/aN9Axe0kM70p7CbdmdxKAynPwjpeQsv074oPpdmWkWduvwFRv+I7CEcSPAAAAAASUVORK5CYII=">
+  <span class="title">{{ trmnl.plugin_settings.instance_name }}</span>
+  {% if show_dt or show_batt or custom_text != blank %}
+  <span class="instance">{% if show_dt %}<span class="g-ico-clock"></span>{{ rt_dt }}{% endif %}{% if show_dt and show_batt %} · {% endif %}{% if show_batt %}<svg class="g-batt" viewBox="0 0 28 16"><rect x="1" y="2" width="22" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="24" y="5" width="3" height="6" rx="1" fill="currentColor"/><rect x="4" y="5" width="{{ batt_fill }}" height="6" fill="currentColor"/></svg>{{ batt_pct }}%{% endif %}{{ custom_text }}</span>
+  {% endif %}
 </div>

@@ -40,14 +40,6 @@ custom_fields:
     prompted. Payload format and a build-your-own guide:
     https://github.com/vinaypamnani/trmnl-apple-groceries
   help_text: This will populate once the plugin has been created/saved.
-- keyname: show_flags
-  field_type: select
-  options:
-    - "Yes"
-    - "No"
-  default: "yes"
-  name: Show Flags (optional)
-  description: "Show a flag icon for flagged items. Shortcut method only - the Companion app sends no flag data."
 - keyname: font_size
   field_type: select
   options:
@@ -67,9 +59,15 @@ custom_fields:
 - keyname: right_label
   field_type: select
   options:
-    - "Attribution"
-    - "Your Name"
+    - "Date and Time"
+    - "Battery"
+    - "Date Time and Battery"
+    - "Custom"
     - "Blank"
-  default: attribution
+  default: date_and_time
   name: Title-Bar Label
-  description: What do you want shown on the right of the title bar?
+  description: 'What to show on the right of the title bar. Date/time uses your device''s local time; "Custom" shows the text you enter below.'
+- keyname: custom_label
+  field_type: string
+  name: Custom Title-Bar Text
+  description: Shown only when Title-Bar Label is set to "Custom". Leave blank to hide.

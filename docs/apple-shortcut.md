@@ -15,14 +15,13 @@ silently stores nothing.
 ```json
 {
   "merge_variables": {
-    "pending":   [ { "n": "Milk", "o": "2%", "f": true }, { "n": "Bananas", "o": "", "f": false } ],
+    "pending":   [ { "n": "Milk", "o": "2%" }, { "n": "Bananas", "o": "" } ],
     "completed": [ { "n": "Eggs" } ]
   }
 }
 ```
 
-`n` = name (required), `o` = note, `f` = flagged (Boolean; renders the ⚑ when the
-plugin's **Show Flags** setting is on). Keep the payload under TRMNL's **2 kB**
+`n` = name (required), `o` = note. Keep the payload under TRMNL's **2 kB**
 webhook limit (~40 pending + 12 completed is comfortable).
 
 ## Setup inputs
@@ -50,7 +49,6 @@ action, and a **Set Variable** captures it:
    1. **Dictionary**:
       - `n` → Type Text → Repeat Item (its name)
       - `o` → Type Text → Repeat Item → **Notes**
-      - `f` → Type **Boolean** → Repeat Item → **Is Flagged**
    2. **Add to Variable** `Pending`
 5. **Find Reminders** (completed)
    - **Where** `List` `is` the **`ListName`** variable
@@ -84,10 +82,6 @@ action, and a **Set Variable** captures it:
   [webhook docs](https://docs.trmnl.com/go/private-plugins/webhooks).
 - **`pending`/`completed` must be Array-typed** in the Dictionary action (step 7).
   Text-typed values stringify the list.
-- **`f` (flagged):** must be **Boolean**-typed in the Dictionary, reading the
-  reminder's **Is Flagged** property — not Text. A Text `"false"` reads as truthy in
-  the template and would always show the flag. The plugin's **Show Flags** setting
-  must be on for the ⚑ to render; the layouts treat a missing `f` as not-flagged.
 - **Empty lists are fine.** Sending only `pending` (no `completed`) still shows the
   Completed column with "Nothing in cart yet"; sending only `completed` shows
   "All shopped!" on the Pending side.

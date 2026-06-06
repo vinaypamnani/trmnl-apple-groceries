@@ -13,7 +13,7 @@ What it produces (see docs/apple-shortcut.md for the human walkthrough):
   Setup question -> Text -> Set Variable WebhookURL
   Setup question -> Text -> Set Variable ListName
   Find Reminders  (List is {ListName}, Is Completed false, limit 40)
-    Repeat: Dictionary { n, o, f } -> add to Pending
+    Repeat: Dictionary { n, o } -> add to Pending
   Find Reminders  (List is {ListName}, Is Completed true, limit 12)
     Repeat: Dictionary { n } -> add to Completed
   Dictionary { pending: [Pending], completed: [Completed] }  (values typed Array)
@@ -24,7 +24,6 @@ Every non-obvious encoding below was verified by extracting a known-good shortcu
 exported from the Shortcuts app (see scripts/extract-shortcut.sh):
   * variable in a Find Reminders List filter -> WFStringSubstitutableState / WFTextTokenString
   * Array-typed dict value (a list variable)  -> WFArraySubstitutableParameterState / WFTextTokenAttachment
-  * Boolean-typed dict value (Is Flagged)     -> WFNumberSubstitutableState / WFTextTokenAttachment (Variable "Repeat Item")
   * TRMNL webhook body must be wrapped in `merge_variables`
 """
 import argparse, os, plistlib, subprocess, sys
@@ -62,12 +61,6 @@ def var_token(name):                       # "just this variable" inside a Text 
 def array_var(name):                       # Array-typed dict value referencing a list variable
     return {"WFSerializationType": "WFArraySubstitutableParameterState",
             "Value": {"WFSerializationType": "WFTextTokenAttachment", "Value": var_attach(name)}}
-
-def bool_property(prop):                    # Boolean-typed dict value from the Repeat Item's property
-    return {"WFSerializationType": "WFNumberSubstitutableState",
-            "Value": {"WFSerializationType": "WFTextTokenAttachment",
-                      "Value": var_attach("Repeat Item",
-                                          [{"PropertyName": prop, "Type": "WFPropertyVariableAggrandizement"}])}}
 
 def dict_field(items):
     return {"WFSerializationType": "WFDictionaryFieldValue",
@@ -136,8 +129,7 @@ def build_actions():
         act("is.workflow.actions.dictionary",
             {"UUID": U_DP, "WFItems": dict_field([
                 kv("n", text_token(ORC, {"{0, 1}": out_attach(U_RPS, "Repeat Item")})),
-                kv("o", text_token(ORC, {"{0, 1}": out_attach(U_RPS, "Repeat Item", NOTES)})),
-                kv("f", bool_property("Is Flagged"), item_type=4)])}),
+                kv("o", text_token(ORC, {"{0, 1}": out_attach(U_RPS, "Repeat Item", NOTES)}))])}),
         act("is.workflow.actions.appendvariable",
             {"WFVariableName": "Pending", "WFInput": single_out(U_DP, "Dictionary")}),
         act("is.workflow.actions.repeat.each",

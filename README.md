@@ -63,15 +63,13 @@ secret named `TRMNL_API_KEY` to enable it.
 ## Connect your data — pick one method
 
 Both feed the same layouts; they differ in setup effort and how much data they
-send. The Shortcut is a **superset** — it adds the Completed ("in cart") column
-and flags.
+send. The Shortcut is a **superset** — it adds the Completed ("in cart") column.
 
 | | **Companion app** (Option A) | **Apple Shortcut** (Option B) |
 | --- | --- | --- |
 | Setup | Install app, toggle a list on — done | Import a Shortcut, paste webhook URL, set up automations |
-| Sends | `reminders` (incomplete only) | `pending` **and** `completed`, with notes + flags |
+| Sends | `reminders` (incomplete only) | `pending` **and** `completed`, with notes |
 | Completed column | ❌ no | ✅ yes ("Pending / Completed" cart view) |
-| Flag icons (⚑) | ❌ not in payload | ✅ when **Show Flags** is on |
 | Item notes | ✅ yes | ✅ yes |
 | Updates | Automatic, in the background | Only when the Shortcut runs (manual or via automation) |
 | Payload limit | Handled by the app | You stay under TRMNL's **2 kB** webhook limit |
@@ -88,8 +86,8 @@ and flags.
    background.
 
 The plugin receives a `reminders` array of your *incomplete* items, so the
-display is a live "to buy" list (no Completed column, no flags — that data isn't
-in the Companion payload).
+display is a live "to buy" list (no Completed column — that data isn't in the
+Companion payload).
 
 ### Option B · Apple Shortcut (adds the Completed column)
 
@@ -109,11 +107,11 @@ first:
 
 ```json
 {
-  "pending":   [ { "n": "Bananas" }, { "n": "Milk", "o": "2%", "f": true } ],
+  "pending":   [ { "n": "Bananas" }, { "n": "Milk", "o": "2%" } ],
   "completed": [ { "n": "Eggs" } ]
 }
 ```
-`n` = name (required), `o` = note, `f` = flagged. Cap items so the payload stays
+`n` = name (required), `o` = note. Cap items so the payload stays
 under TRMNL's **2 kB** webhook limit (~40 pending + 12 completed is comfortable).
 
 > **Why two lists instead of one tagged list (`c: true` for completed)?**
@@ -130,10 +128,10 @@ under TRMNL's **2 kB** webhook limit (~40 pending + 12 completed is comfortable)
 | --- | --- |
 | Apple Shortcut *(optional)* | Copyable iCloud link to import the prebuilt Shortcut. **Shortcut only.** |
 | Webhook URL *(optional)* | POST target for the Shortcut method (Companion doesn't need it). |
-| Show Flags *(optional)* | Flag icon for flagged items. **Shortcut only.** |
 | Font Size | Regular / **Large** (default) / Extra Large — scales the whole layout. |
 | Title Lines | Max lines an item name wraps over (1–4); Full layout. |
-| Title-Bar Label | Title-bar right side: Attribution, Your Name, or Blank. |
+| Title-Bar Label | Title-bar right side: Date & Time, Battery, both, Custom text, or Blank. Date/time and battery use the device's own values. |
+| Custom Title-Bar Text | Free text shown when Title-Bar Label is **Custom**. |
 
 ## Project structure
 

@@ -33,10 +33,10 @@ in `src/`.
 
 **Dual data source (the central design constraint).** Every layout auto-detects
 which of two payload shapes it received and adapts:
-- **Shortcut** sends `pending` + `completed` arrays of `{ n, o, f }`
-  (name / note / flagged). This is the superset → enables the Completed column.
+- **Shortcut** sends `pending` + `completed` arrays of `{ n, o }`
+  (name / note). This is the superset → enables the Completed column.
 - **Companion app** sends a `reminders` array of `{ title, notes, list_name }`
-  (incomplete items only) → single "to buy" list, no Completed column, no flags.
+  (incomplete items only) → single "to buy" list, no Completed column.
 
 Each layout opens with a Liquid block that prefers `pending/completed` and falls
 back to `reminders`, normalizing field names with `item.title | default: item.n`
@@ -60,7 +60,7 @@ they raise specificity to beat the TRMNL framework CSS, which loads before this
 
 - `src/settings.yml` — plugin definition **uploaded** by `push`: strategy
   (`webhook`), the live plugin `id` (pushes update this instance, not create new),
-  and `custom_fields` (right_label, show_flags, title_lines, font_size). Note:
+  and `custom_fields` (right_label, custom_label, title_lines, font_size). Note:
   `trmnlp pull` overwrites this file with the server copy.
 - `.trmnlp.yml` — **local dev only**, not uploaded. Holds sample webhook data for
   the preview. Defaults to the Companion `reminders` shape; comment it out and add
@@ -69,6 +69,6 @@ they raise specificity to beat the TRMNL framework CSS, which loads before this
 ## Constraints
 
 - Webhook payloads must stay under TRMNL's **2 kB** limit (~40 pending + 12
-  completed items). Keep field names short on the Shortcut side (`n`/`o`/`f`).
+  completed items). Keep field names short on the Shortcut side (`n`/`o`).
 - Design for 1-bit e-ink: no color/grayscale, no animation. The outlined header
   "pill" uses a multi-direction `text-shadow` to fake an outline in pure B/W.

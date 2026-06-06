@@ -9,15 +9,16 @@ watch:
 
 # Values for the custom fields defined in src/settings.yml.
 custom_fields:
-  right_label: attribution
-  show_flags: 'yes'
+  # right_label: date_and_time | battery | date_time_and_battery | custom | blank
+  right_label: date_time_and_battery
+  custom_label: Costco run
   title_lines: 1
   font_size: large
 
 # Sample webhook data for the local preview (`trmnlp serve`).
 # This mimics the TRMNL Companion app payload (pending-only `reminders`).
 # To preview the Apple Shortcut view instead, comment out `reminders` and supply
-# `pending:` / `completed:` arrays of { n, o, f } items.
+# `pending:` / `completed:` arrays of { n, o } items.
 variables:
   trmnl:
     plugin_settings:
@@ -25,6 +26,10 @@ variables:
     user:
       name: Vinay Pamnani
       locale: en
+      # On a real device TRMNL fills these from your account timezone (DST-aware).
+      # The preview defaults to 0 (UTC); set a real offset here to test local time.
+      time_zone_iana: America/Denver
+      utc_offset: -21600   # MDT (-6h); seconds
   reminders:
     - { title: Gatorade, notes: '', list_name: Grocery List }
     - { title: Chicken thighs, notes: 'boneless, skinless', list_name: Grocery List }
@@ -40,12 +45,12 @@ variables:
     - { title: Roma tomatoes, notes: '', list_name: Grocery List }
 
   # Apple Shortcut view: comment out `reminders` above, uncomment the two arrays
-  # below. Items are { n: name, o: note (optional), f: flagged (optional) }.
+  # below. Items are { n: name, o: note (optional) }.
   # pending:
   #   - { n: Gatorade }
   #   - { n: Chicken thighs, o: 'boneless, skinless' }
   #   - { n: Garam masala }
-  #   - { n: Whole milk, o: '2% if no whole', f: true }
+  #   - { n: Whole milk, o: '2% if no whole' }
   #   - { n: Bananas }
   #   - { n: Sourdough loaf }
   #   - { n: Baby spinach }
@@ -53,7 +58,7 @@ variables:
   #   - { n: Olive oil }
   #   - { n: Cheddar cheese }
   #   - { n: Coffee beans }
-  #   - { n: Roma tomatoes, f: true }
+  #   - { n: Roma tomatoes }
   # completed:
   #   - { n: Eggs }
   #   - { n: Butter }

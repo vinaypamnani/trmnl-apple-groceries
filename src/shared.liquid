@@ -27,8 +27,15 @@ properties the framework leaves unset (line-clamp, min-width, etc.).
   .g-done { text-decoration: line-through; }
   .description.g-note { word-break: normal; }
 
-  /* flagged item: bold name (strongest emphasis available on 1-bit e-ink) */
-  .g-name.g-flagged { font-weight: 700; }
+  /* Apple logo in the title bar uses the framework's .image slot (see layouts) */
+
+  /* clock icon for the date/time label — inline SVG background, crisp on 1-bit */
+  .g-ico-clock::before {
+    content: ""; display: inline-block; width: 0.95em; height: 0.95em;
+    margin-right: 0.3em; vertical-align: -0.12em;
+    background: center / contain no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTEyIDYgVjEyIEgxNyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg=="); }
+  /* battery is an inline <svg> in each layout so its fill rect can track the charge */
+  .g-batt { display: inline-block; width: 1.6em; height: 0.9em; margin-right: 0.3em; vertical-align: -0.12em; }
 
   /* empty "to-buy" checkbox — drawn in CSS so it's crisp and font-independent */
   .g-box {

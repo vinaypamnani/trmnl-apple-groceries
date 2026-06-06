@@ -1,13 +1,6 @@
 {% liquid
 assign font_size = trmnl.plugin_settings.custom_fields_values.font_size | default: "large"
 
-case trmnl.plugin_settings.custom_fields_values.show_flags
-when "no"
-assign show_flags = false
-else
-assign show_flags = true
-endcase
-
 # Prefer the Shortcut (pending/completed); fall back to Companion reminders.
 if pending or completed
 assign pending_items = pending
@@ -31,12 +24,10 @@ endif
       {% else %}
       {% for item in pending_items %}
       {% assign name = item.title | default: item.n %}
-      {% assign flagged = false %}
-      {% if show_flags and item.f %}{% assign flagged = true %}{% endif %}
       <div class="item">
-        <div class="meta">{% if flagged %}<span class="index">⚑</span>{% else %}<span class="g-box"></span>{% endif %}</div>
+        <div class="meta"><span class="g-box"></span></div>
         <div class="content g-content">
-          <span class="title title--small g-name{% if flagged %} g-flagged{% endif %}">{{ name }}</span>
+          <span class="title title--small g-name">{{ name }}</span>
         </div>
       </div>
       {% endfor %}
@@ -46,7 +37,8 @@ endif
 </div>
 
 <div class="title_bar">
-  <span class="title">🛒 {{ trmnl.plugin_settings.instance_name }}</span>
+  <img class="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABZElEQVR4nN3XsUuXQRgH8I9aSUNIQRgJGa6OTYJDCOUQIS462eLYXxARDhG0FQaCg6CLUVCDcy4uioNLILQ0RA6pGS1FBhYvnPDyQvqev4c38AsP73DHfTju3rv3JS59eIAxDaUDT/Ebf/CoKXgugYc11AR6t4K+R1sT8EoJ/YEbTaBnSuv6Fbc1lHa8xkNciR78Mqawhm18wCwGSn0uYRJvU/seNvECvSdBR/C9snnK9RHr2D+iz0/cz0FHcXDEgLl1pw7ag2+B6ALO1oGfBaJLdd/rNmwFocXaX1cz1wJnuywjg4HwdA5883/B/YHwuxz4YiBcnONXc/BPgfirHHg+EC7qebrJjs14MFzUKrqPgzvTTRQJ7+BcnVk/CYYfq5kufAlCt9OdXTv3guCJHPQwiy2ib5ww5ytfktXb5zN+/aN9Axe0kM70p7CbdmdxKAynPwjpeQsv074oPpdmWkWduvwFRv+I7CEcSPAAAAAASUVORK5CYII=">
+  <span class="title">{{ trmnl.plugin_settings.instance_name }}</span>
   {% if show_completed %}
   <span class="instance">✓ {{ completed | size }} done</span>
   {% else %}
