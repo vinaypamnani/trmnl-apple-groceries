@@ -1,2 +1,6 @@
 # trmnlp build output
 _build/
+
+# dist
+dist/
+.DS_Store
