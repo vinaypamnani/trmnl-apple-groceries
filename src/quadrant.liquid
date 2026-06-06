@@ -17,10 +17,13 @@ if use_shortcut
 assign pending_items = pending
 assign show_completed = true
 assign pending_label = "Pending"
+assign header_title = pending_label
 else
 assign pending_items = reminders
 assign show_completed = false
 assign pending_label = reminders.first.list_name | default: "Groceries"
+# Companion only: a custom Top Title overrides the list name.
+assign header_title = trmnl.plugin_settings.custom_fields_values.title_top | default: pending_label
 endif
 %}
 
@@ -29,7 +32,7 @@ endif
     <div class="column g-top" data-list-limit="true" data-list-hidden-count="true">
       <div class="bg--backdrop p--1 text--center g-pill">
         {% assign pc = pending_items | size %}
-        <span class="title title--small g-pill-text g-cart">{{ pending_label }} · {{ pc }} item{% if pc != 1 %}s{% endif %}</span>
+        <span class="title title--small g-pill-text g-cart">{{ header_title }} · {{ pc }} item{% if pc != 1 %}s{% endif %}</span>
       </div>
       {% if pending_items == empty %}
       <span class="description">All shopped!</span>

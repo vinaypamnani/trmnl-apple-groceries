@@ -44,13 +44,16 @@ with `item.title | default: item.n` and `item.notes | default: item.o`. The
 **List Source** custom field (`list_source`) controls this: `companion` (default)
 and `shortcut` force a view; `auto` detects from the payload (Shortcut wins when
 `pending`/`completed` are present). A forced view that doesn't match the incoming
-data renders empty. When editing one layout's detection/rendering logic, mirror the
+data renders empty. The pending header reads `header_title` — the **Top Title**
+(`title_top`) when set, otherwise the list name (Companion) or "Pending" (Shortcut);
+`title_top` is **Companion-only**. The bottom bar's left is always the plugin's
+instance name. When editing one layout's detection/rendering logic, mirror the
 change across all four — they share this contract, not code.
 
 **Conditional fields.** TRMNL select fields support `conditional_validation`
 (`when: <value>` → `hidden: [keynames]` and/or `required: [keynames]`). `list_source`
-uses it to hide `apple_shortcut_url` / `webhook_url` when `companion` is selected
-(shown for `auto` and `shortcut`). Hideable fields are marked `optional: true` so
+uses it to hide `apple_shortcut_url` / `webhook_url` when `companion` is selected,
+and to hide `title_top` unless `companion` is selected. Hideable fields are marked `optional: true` so
 the form saves while hidden. This only affects the settings UI, not rendering.
 
 **Shared styles.** `src/shared.liquid` holds all CSS and is auto-prepended to each
@@ -60,7 +63,7 @@ Convention: shared classes are prefixed `g-` (e.g. `.g-name`, `.g-pill`,
 they raise specificity to beat the TRMNL framework CSS, which loads before this
 `<style>`. Plain `g-` classes cover only properties the framework leaves unset
 (line-clamp, min-width). Settings map to CSS vars: Font Size → `--ui-scale` via
-`g-scale-*`, Title Lines → `--clamp` via `g-clamp*`.
+`g-scale-*`, Item Name Lines (`title_lines`) → `--clamp` via `g-clamp*`.
 
 **Overflow.** Long lists rely on TRMNL framework data attributes —
 `data-list-limit`, `data-list-hidden-count` ("and N more"),
@@ -70,8 +73,8 @@ they raise specificity to beat the TRMNL framework CSS, which loads before this
 
 - `src/settings.yml` — plugin definition **uploaded** by `push`: strategy
   (`webhook`), the live plugin `id` (pushes update this instance, not create new),
-  and `custom_fields` (list_source, right_label, custom_label, title_lines,
-  font_size). Note:
+  and `custom_fields` (list_source, title_top, title_bottom_right,
+  title_bottom_right_custom, title_lines, font_size). Note:
   `trmnlp pull` overwrites this file with the server copy.
 - `.trmnlp.yml` — **local dev only**, not uploaded. Holds sample webhook data for
   the preview. Defaults to the Companion `reminders` shape; comment it out and add

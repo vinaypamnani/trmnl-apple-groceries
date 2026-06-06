@@ -10,10 +10,11 @@ watch:
 # Values for the custom fields defined in src/settings.yml.
 custom_fields:
   # list_source: auto | shortcut | companion
-  list_source: auto
-  # right_label: date_and_time | battery | date_time_and_battery | custom | blank
-  right_label: date_time_and_battery
-  custom_label: Costco run
+  list_source: companion
+  title_top: Groceries            # Companion only; blank = Reminders list name
+  # title_bottom_right: date_and_time | battery | date_time_and_battery | custom | blank
+  title_bottom_right: date_time_and_battery
+  title_bottom_right_custom: Custom Label
   title_lines: 1
   font_size: large
 

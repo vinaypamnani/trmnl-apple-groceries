@@ -34,6 +34,12 @@ custom_fields:
       hidden:
         - apple_shortcut_url
         - webhook_url
+    - when: shortcut
+      hidden:
+        - title_top
+    - when: auto
+      hidden:
+        - title_top
 # TODO: replace `value` with the real iCloud link after sharing the Shortcut
 # (Shortcuts app -> Share -> Copy iCloud Link). See docs/apple-shortcut.md.
 - keyname: apple_shortcut_url
@@ -56,6 +62,36 @@ custom_fields:
     prompted. Payload format and a build-your-own guide:
     https://github.com/vinaypamnani/trmnl-apple-groceries
   help_text: This will populate once the plugin has been created/saved.
+- keyname: title_top
+  field_type: string
+  optional: true
+  name: Top Title
+  description: Heading at the top of the list — Companion app only. Leave blank to use your Reminders list name. (The Apple Shortcut always shows Pending/Completed; the bottom bar always shows your plugin's name.)
+- keyname: title_bottom_right
+  field_type: select
+  options:
+    - "Date and Time: date_and_time"
+    - "Battery: battery"
+    - "Date Time and Battery: date_time_and_battery"
+    - "Custom: custom"
+    - "Blank: blank"
+  default: date_and_time
+  name: Bottom Bar (Right)
+  description: 'What to show on the right of the bottom bar. Date/time uses your device''s local time; "Custom" shows the text you enter below.'
+  conditional_validation:
+    - when: date_and_time
+      hidden: [title_bottom_right_custom]
+    - when: battery
+      hidden: [title_bottom_right_custom]
+    - when: date_time_and_battery
+      hidden: [title_bottom_right_custom]
+    - when: blank
+      hidden: [title_bottom_right_custom]
+- keyname: title_bottom_right_custom
+  field_type: string
+  optional: true
+  name: Custom Bottom-Right Text
+  description: Shown only when "Bottom Bar (Right)" is set to Custom. Leave blank to hide.
 - keyname: font_size
   field_type: select
   options:
@@ -70,30 +106,5 @@ custom_fields:
   default: 1
   min: 1
   max: 4
-  name: Title Lines
-  description: How many maximum lines do you want item names to wrap over?
-- keyname: right_label
-  field_type: select
-  options:
-    - "Date and Time: date_and_time"
-    - "Battery: battery"
-    - "Date Time and Battery: date_time_and_battery"
-    - "Custom: custom"
-    - "Blank: blank"
-  default: date_and_time
-  name: Title-Bar Label
-  description: 'What to show on the right of the title bar. Date/time uses your device''s local time; "Custom" shows the text you enter below.'
-  conditional_validation:
-    - when: date_and_time
-      hidden: [custom_label]
-    - when: battery
-      hidden: [custom_label]
-    - when: date_time_and_battery
-      hidden: [custom_label]
-    - when: blank
-      hidden: [custom_label]
-- keyname: custom_label
-  field_type: string
-  optional: true
-  name: Custom Title-Bar Text
-  description: Shown only when Title-Bar Label is set to "Custom". Leave blank to hide.
+  name: Item Name Lines
+  description: Maximum lines an item name can wrap over before it's truncated.

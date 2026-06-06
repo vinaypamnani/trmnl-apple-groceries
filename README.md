@@ -132,10 +132,13 @@ under TRMNL's **2 kB** webhook limit (~40 pending + 12 completed is comfortable)
 | List Source | **TRMNL Companion** (default), **Apple Shortcut**, or **Auto-detect**. Picking Companion hides the Shortcut + Webhook fields below; Apple Shortcut reveals them and enables the Completed column. |
 | Apple Shortcut *(optional)* | Copyable iCloud link to import the prebuilt Shortcut. **Shortcut only.** |
 | Webhook URL *(optional)* | POST target for the Shortcut method (Companion doesn't need it). |
+| Top Title | Heading at the top of the list. Blank = your Reminders list name. **Companion only** — the Shortcut always shows Pending/Completed. |
+| Bottom Bar (Right) | Bottom-bar right side: Date & Time, Battery, both, Custom text, or Blank. Date/time and battery use the device's own values. |
+| Custom Bottom-Right Text | Free text shown when Bottom Bar (Right) is **Custom**. |
 | Font Size | Regular / **Large** (default) / Extra Large — scales the whole layout. |
-| Title Lines | Max lines an item name wraps over (1–4); Full layout. |
-| Title-Bar Label | Title-bar right side: Date & Time, Battery, both, Custom text, or Blank. Date/time and battery use the device's own values. |
-| Custom Title-Bar Text | Free text shown when Title-Bar Label is **Custom**. |
+| Item Name Lines | Max lines an item name wraps over (1–4); Full layout. |
+
+> The bottom bar's left always shows your plugin's instance name (with the Apple logo) — it isn't configurable.
 
 ## Project structure
 
