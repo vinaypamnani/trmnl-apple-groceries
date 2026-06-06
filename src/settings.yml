@@ -19,7 +19,7 @@ custom_fields:
   name: About This Plugin
   field_type: author_bio
   description: Show your Apple Reminders grocery list on TRMNL. Feed it from the TRMNL Companion iOS app (recommended, no setup) or an Apple Shortcut.
-  github_url: https://github.com/vinaypamnani/trmnl-apple-plugin
+  github_url: https://github.com/vinaypamnani/trmnl-apple-groceries
 # TODO: replace `value` with the real iCloud link after sharing the Shortcut
 # (Shortcuts app -> Share -> Copy iCloud Link). See docs/apple-shortcut.md.
 - keyname: apple_shortcut_url
@@ -35,13 +35,10 @@ custom_fields:
   field_type: copyable_webhook_url
   name: Webhook URL (optional)
   description: >-
-    For the Apple Shortcut method, POST your grocery list here as JSON (the
-    Companion app doesn't need this). Easiest path: import the Shortcut from the
-    "Apple Shortcut" field above and paste this URL when it asks. Building your
-    own? Send pending + completed (completed unlocks the Completed column),
-    newest-completed first, under 2 kB (~40 pending + 12 completed). Per item:
-    n = name (required), o = note, f = flagged. Shape:
-    {"pending":[{"n":"Milk","o":"2%","f":true}],"completed":[{"n":"Eggs"}]}
+    Apple Shortcut method only — the Companion app doesn't need this. Import the
+    Shortcut from the "Apple Shortcut" field above and paste this URL when
+    prompted. Payload format and a build-your-own guide:
+    https://github.com/vinaypamnani/trmnl-apple-groceries
   help_text: This will populate once the plugin has been created/saved.
 - keyname: show_flags
   field_type: select
