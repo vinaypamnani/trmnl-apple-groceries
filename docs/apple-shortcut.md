@@ -3,7 +3,9 @@
 This is the exact recipe for the Apple Shortcut that feeds the plugin's
 **Shortcut view** (Pending + Completed). Most users should just **import the
 prebuilt Shortcut** linked in the [README](../README.md#option-b--apple-shortcut-adds-the-completed-column);
-this page is for building it from scratch or understanding what it does.
+this page is for building it from scratch or understanding what it does. To have
+**Claude generate the `.shortcut` for you** on a Mac, see
+[`shortcut-build-prompt.md`](shortcut-build-prompt.md).
 
 The Shortcut POSTs this JSON to your plugin's **Webhook URL**:
 
@@ -26,7 +28,9 @@ TRMNL's **2 kB** webhook limit (~40 pending + 12 completed is comfortable).
    → *Set Variable* `WebhookURL` to this Text.
 
 2. **Find Reminders**
-   - **Where**: `List` `is` `Grocery List` (change to your list's name)
+   - **Where**: `List` `is` *your grocery list* — don't hardcode a name. Add a
+     **second Import Question** ("Which Reminders list holds your groceries?")
+     bound to this **List** filter, so each user picks their own list on import.
    - **and** `Is Completed` `is` `false`
    - **Limit**: 40 items (keeps the payload small)
    → result is your pending reminders.
@@ -42,7 +46,8 @@ TRMNL's **2 kB** webhook limit (~40 pending + 12 completed is comfortable).
    > variable.
 
 4. **Find Reminders** (second one)
-   - **Where**: `List` `is` `Grocery List`
+   - **Where**: `List` `is` *the same list from the import question* (reuse the
+     selection from step 2 so both queries read the same list)
    - **and** `Is Completed` `is` `true`
    - **and** `Completion Date` `is in the last` `1` `day`
    - **Sort by** `Completion Date`, **Newest First**
