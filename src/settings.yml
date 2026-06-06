@@ -11,7 +11,7 @@ polling_verb: get
 polling_url: ''
 polling_headers: ''
 polling_body: ''
-id: ecec4609-aaab-4087-b08b-4448514111cb
+id: 325674
 name: Apple Groceries
 refresh_interval: 60
 custom_fields:
