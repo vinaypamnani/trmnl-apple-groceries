@@ -1,4 +1,4 @@
-# Apple Grocery Reminders — TRMNL Plugin
+# Apple Groceries — TRMNL Plugin
 
 Display your Apple Reminders grocery list on a TRMNL device. The layouts
 auto-detect their data source, so you can feed them from **either**:
@@ -75,6 +75,14 @@ settings). Send both lists, newest-completed first:
 ```
 `n` = name (required), `o` = note, `f` = flagged. Cap items so the payload stays
 under TRMNL's **2 kB** webhook limit (~40 pending + 12 completed is comfortable).
+
+> **Why two lists instead of one tagged list (`c: true` for completed)?**
+> Separate `pending`/`completed` arrays are smaller on the wire (completed items
+> carry no per-item discriminator), map directly onto how the Shortcut builds the
+> data (two "Find Reminders" filters), and split cleanly in Liquid — there's no
+> clean "where-not" to pull pending items back out of a single tagged list. A
+> single list would only help if we rendered completed items *inline* among
+> pending ones, which the Pending/Completed column layout intentionally doesn't.
 
 ## Settings
 

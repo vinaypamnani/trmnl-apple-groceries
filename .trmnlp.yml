@@ -21,7 +21,7 @@ custom_fields:
 variables:
   trmnl:
     plugin_settings:
-      instance_name: Apple Grocery Reminders
+      instance_name: Apple Groceries
     user:
       name: Vinay Pamnani
       locale: en
@@ -38,3 +38,24 @@ variables:
     - { title: Cheddar cheese, notes: '', list_name: Grocery List }
     - { title: Coffee beans, notes: '', list_name: Grocery List }
     - { title: Roma tomatoes, notes: '', list_name: Grocery List }
+
+  # Apple Shortcut view: comment out `reminders` above, uncomment the two arrays
+  # below. Items are { n: name, o: note (optional), f: flagged (optional) }.
+  # pending:
+  #   - { n: Gatorade }
+  #   - { n: Chicken thighs, o: 'boneless, skinless' }
+  #   - { n: Garam masala }
+  #   - { n: Whole milk, o: '2% if no whole', f: true }
+  #   - { n: Bananas }
+  #   - { n: Sourdough loaf }
+  #   - { n: Baby spinach }
+  #   - { n: Greek yogurt, o: 'plain, full fat' }
+  #   - { n: Olive oil }
+  #   - { n: Cheddar cheese }
+  #   - { n: Coffee beans }
+  #   - { n: Roma tomatoes, f: true }
+  # completed:
+  #   - { n: Eggs }
+  #   - { n: Butter }
+  #   - { n: Paper towels }
+  #   - { n: Orange juice }

@@ -12,7 +12,7 @@ polling_url: ''
 polling_headers: ''
 polling_body: ''
 id: ecec4609-aaab-4087-b08b-4448514111cb
-name: Apple Grocery Reminders
+name: Apple Groceries
 refresh_interval: 60
 custom_fields:
 - keyname: about
