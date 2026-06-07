@@ -92,7 +92,8 @@ they raise specificity to beat the TRMNL framework CSS, which loads before this
 
 ## Constraints
 
-- Webhook payloads must stay under TRMNL's **2 kB** limit (~40 to-buy + 12
-  completed items). Keep field names short on the Shortcut side (`t`/`n`).
+- Webhook payloads must stay under TRMNL's **2 kB** limit (~45 to-buy + 15
+  completed items at realistic name lengths ≈ 1.9 kB). Keep field names short on
+  the Shortcut side (`t`/`n`).
 - Design for 1-bit e-ink: no color/grayscale, no animation. The outlined header
   "pill" uses a multi-direction `text-shadow` to fake an outline in pure B/W.

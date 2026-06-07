@@ -119,7 +119,7 @@ first:
 `t` = title/name (required), `n` = note. The short keys are just the first
 letters of the Companion's `title`/`notes`, so the layouts read both with one
 fallback. Cap items so the payload stays under TRMNL's **2 kB** webhook limit
-(~40 to-buy + 12 completed is comfortable).
+(~45 to-buy + 15 completed is comfortable).
 The Companion app sends the same `reminders` key (with `{ title, notes }` items)
 and no `completed`, which is how the layouts tell the two apart.
 

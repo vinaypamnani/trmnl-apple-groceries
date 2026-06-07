@@ -12,9 +12,9 @@ What it produces (see docs/apple-shortcut.md for the human walkthrough):
 
   Setup question -> Text -> Set Variable WebhookURL
   Setup question -> Text -> Set Variable ListName
-  Find Reminders  (List is {ListName}, Is Completed false, limit 40)
+  Find Reminders  (List is {ListName}, Is Completed false, limit 45)
     Repeat: Dictionary { t, n } -> add to Reminders
-  Find Reminders  (List is {ListName}, Is Completed true, limit 12)
+  Find Reminders  (List is {ListName}, Is Completed true, limit 15)
     Repeat: Dictionary { t } -> add to Completed
   Dictionary { reminders: [Reminders], completed: [Completed] }  (values typed Array)
     -> Set Variable mergeValues
@@ -122,7 +122,7 @@ def build_actions():
         act("is.workflow.actions.filter.reminders",
             {"UUID": U_FP, "WFContentItemFilter": content_filter([list_row(), completed_row(False)]),
              "WFContentItemSortProperty": "Creation Date", "WFContentItemSortOrder": "Oldest First",
-             "WFContentItemLimitEnabled": True, "WFContentItemLimitNumber": 40}),
+             "WFContentItemLimitEnabled": True, "WFContentItemLimitNumber": 45}),
         act("is.workflow.actions.repeat.each",
             {"UUID": U_RPS, "GroupingIdentifier": G_RP, "WFControlFlowMode": 0,
              "WFInput": single_out(U_FP, "Reminders")}),
@@ -138,7 +138,7 @@ def build_actions():
         act("is.workflow.actions.filter.reminders",
             {"UUID": U_FC, "WFContentItemFilter": content_filter([list_row(), completed_row(True)]),
              "WFContentItemSortProperty": "Completion Date", "WFContentItemSortOrder": "Latest First",
-             "WFContentItemLimitEnabled": True, "WFContentItemLimitNumber": 12}),
+             "WFContentItemLimitEnabled": True, "WFContentItemLimitNumber": 15}),
         act("is.workflow.actions.repeat.each",
             {"UUID": U_RCS, "GroupingIdentifier": G_RC, "WFControlFlowMode": 0,
              "WFInput": single_out(U_FC, "Reminders")}),

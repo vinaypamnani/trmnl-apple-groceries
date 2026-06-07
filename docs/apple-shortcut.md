@@ -25,7 +25,7 @@ silently stores nothing.
 `title`/`notes`. Both payloads use the `reminders` key for the to-buy list; the
 Shortcut's `completed` array (and its short `t`/`n` item keys)
 is what enables the Completed column. Keep the payload under TRMNL's **2 kB**
-webhook limit (~40 to-buy + 12 completed is comfortable).
+webhook limit (~45 to-buy + 15 completed is comfortable).
 
 ## Setup inputs
 
@@ -47,7 +47,7 @@ action, and a **Set Variable** captures it:
      into the List filter; that's how each user targets their own list without a
      hardcoded name.
    - **and** `Is Completed` `is` `false`
-   - **Limit** 40 items.
+   - **Limit** 45 items.
 4. **Repeat with Each** (the Find Reminders result):
    1. **Dictionary**:
       - `t` → Type Text → Repeat Item (its name)
@@ -56,7 +56,7 @@ action, and a **Set Variable** captures it:
 5. **Find Reminders** (completed)
    - **Where** `List` `is` the **`ListName`** variable
    - **and** `Is Completed` `is` `true`
-   - **Limit** 12 items. *(Optional: add `Completion Date` `is in the last` `1`
+   - **Limit** 15 items. *(Optional: add `Completion Date` `is in the last` `1`
      `day` and sort by `Completion Date`, Newest First, to show only recent buys.)*
 6. **Repeat with Each** (the second result):
    1. **Dictionary**: `t` → Repeat Item (its name)
