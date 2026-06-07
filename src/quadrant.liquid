@@ -1,32 +1,3 @@
-{% liquid
-assign font_size = trmnl.plugin_settings.custom_fields_values.font_size | default: "large"
-
-# List Source: "shortcut" (pending/completed) or "companion" (reminders).
-# "auto" (default) detects from the payload — Shortcut wins when present.
-assign source = trmnl.plugin_settings.custom_fields_values.list_source | default: "auto"
-assign use_shortcut = false
-if source == "shortcut"
-assign use_shortcut = true
-elsif source == "auto"
-if pending or completed
-assign use_shortcut = true
-endif
-endif
-
-if use_shortcut
-assign pending_items = pending
-assign show_completed = true
-assign pending_label = "Pending"
-assign header_title = pending_label
-else
-assign pending_items = reminders
-assign show_completed = false
-assign pending_label = reminders.first.list_name | default: "Groceries"
-# Companion only: a custom Top Title overrides the list name.
-assign header_title = trmnl.plugin_settings.custom_fields_values.title_top | default: pending_label
-endif
-%}
-
 <div class="layout layout--col layout--top g-scale-{{ font_size }}">
   <div class="columns g-cols">
     <div class="column g-top" data-list-limit="true" data-list-hidden-count="true">

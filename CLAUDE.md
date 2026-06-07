@@ -31,24 +31,28 @@ Four layouts — `full`, `half_horizontal`, `half_vertical`, `quadrant` — TRMN
 picks one based on the device's mashup slot. Each is a standalone `.liquid` file
 in `src/`.
 
-**Dual data source (the central design constraint).** Every layout auto-detects
-which of two payload shapes it received and adapts:
-- **Shortcut** sends `pending` + `completed` arrays of `{ n, o }`
-  (name / note). This is the superset → enables the Completed column.
-- **Companion app** sends a `reminders` array of `{ title, notes, list_name }`
+**Dual data source (the central design constraint).** Both payloads carry the
+to-buy list in a single `reminders` array — only the item shape and the extra
+`completed` array differ:
+- **Shortcut** sends `reminders` + `completed` arrays of `{ n, o }`
+  (name / note). The `completed` array is the superset → enables the Completed
+  column. (Short keys keep it under 2 kB.)
+- **Companion app** sends only `reminders`, of `{ title, notes, list_name }`
   (incomplete items only) → single "to buy" list, no Completed column.
 
 Each layout opens with a Liquid block that resolves the source into `use_shortcut`,
-then sets `pending_items` / `show_completed` accordingly, normalizing field names
-with `item.title | default: item.n` and `item.notes | default: item.o`. The
-**List Source** custom field (`list_source`) controls this: `companion` (default)
-and `shortcut` force a view; `auto` detects from the payload (Shortcut wins when
-`pending`/`completed` are present). A forced view that doesn't match the incoming
-data renders empty. The pending header reads `header_title` — the **Top Title**
-(`title_top`) when set, otherwise the list name (Companion) or "Pending" (Shortcut);
-`title_top` is **Companion-only**. The bottom bar's left is always the plugin's
-instance name. When editing one layout's detection/rendering logic, mirror the
-change across all four — they share this contract, not code.
+sets `pending_items = reminders` always, and toggles `show_completed`, normalizing
+field names with `item.title | default: item.n` and `item.notes | default: item.o`.
+The **List Source** custom field (`list_source`) controls this: `auto` (default)
+detects from the payload — Shortcut when `completed` is present *or* items are
+`n`-keyed (`reminders.first.n`); `companion` and `shortcut` force the view. Because
+`pending_items` is always `reminders`, a forced view still renders the items; it
+only changes whether the Completed column shows (and the header style). The pending
+header reads `header_title` — the **Top Title** (`title_top`) when set, otherwise
+the list name (Companion) or "Pending" (Shortcut); `title_top` is **Companion-only**.
+The bottom bar's left is always the plugin's instance name. When editing one
+layout's detection/rendering logic, mirror the change across all four — they share
+this contract, not code.
 
 **Conditional fields.** TRMNL select fields support `conditional_validation`
 (`when: <value>` → `hidden: [keynames]` and/or `required: [keynames]`). `list_source`
@@ -63,7 +67,7 @@ Convention: shared classes are prefixed `g-` (e.g. `.g-name`, `.g-pill`,
 they raise specificity to beat the TRMNL framework CSS, which loads before this
 `<style>`. Plain `g-` classes cover only properties the framework leaves unset
 (line-clamp, min-width). Settings map to CSS vars: Font Size → `--ui-scale` via
-`g-scale-*`, Item Name Lines (`title_lines`) → `--clamp` via `g-clamp*`.
+`g-scale-*`. Item names always clamp to a single line (a grocery item is short).
 
 **Overflow.** Long lists rely on TRMNL framework data attributes —
 `data-list-limit`, `data-list-hidden-count` ("and N more"),
@@ -74,15 +78,15 @@ they raise specificity to beat the TRMNL framework CSS, which loads before this
 - `src/settings.yml` — plugin definition **uploaded** by `push`: strategy
   (`webhook`), the live plugin `id` (pushes update this instance, not create new),
   and `custom_fields` (list_source, title_top, title_bottom_right,
-  title_bottom_right_custom, title_lines, font_size). Note:
+  title_bottom_right_custom, font_size). Note:
   `trmnlp pull` overwrites this file with the server copy.
 - `.trmnlp.yml` — **local dev only**, not uploaded. Holds sample webhook data for
-  the preview. Defaults to the Companion `reminders` shape; comment it out and add
-  `pending:`/`completed:` arrays to preview the Shortcut view.
+  the preview. Defaults to the Companion `reminders` shape; swap in `{ n, o }`
+  `reminders` items + a `completed:` array to preview the Shortcut view.
 
 ## Constraints
 
-- Webhook payloads must stay under TRMNL's **2 kB** limit (~40 pending + 12
+- Webhook payloads must stay under TRMNL's **2 kB** limit (~40 to-buy + 12
   completed items). Keep field names short on the Shortcut side (`n`/`o`).
 - Design for 1-bit e-ink: no color/grayscale, no animation. The outlined header
   "pill" uses a multi-direction `text-shadow` to fake an outline in pure B/W.

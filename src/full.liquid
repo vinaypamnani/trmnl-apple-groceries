@@ -1,57 +1,4 @@
-{% liquid
-assign title_lines = trmnl.plugin_settings.custom_fields_values.title_lines | default: 1
-assign font_size = trmnl.plugin_settings.custom_fields_values.font_size | default: "large"
-
-# List Source: "shortcut" (pending/completed, adds Completed column) or
-# "companion" (reminders only). "auto" (default) detects from the payload —
-# Shortcut wins when its arrays are present.
-assign source = trmnl.plugin_settings.custom_fields_values.list_source | default: "auto"
-assign use_shortcut = false
-if source == "shortcut"
-assign use_shortcut = true
-elsif source == "auto"
-if pending or completed
-assign use_shortcut = true
-endif
-endif
-
-if use_shortcut
-assign pending_items = pending
-assign show_completed = true
-assign pending_label = "Pending"
-assign header_title = pending_label
-else
-assign pending_items = reminders
-assign show_completed = false
-assign pending_label = reminders.first.list_name | default: "Groceries"
-# Companion only: a custom Top Title overrides the list name.
-assign header_title = trmnl.plugin_settings.custom_fields_values.title_top | default: pending_label
-endif
-
-# Title-bar right label: Date & Time / Battery / both / Custom text / Blank.
-# Date & time is rendered in the device's local wall-clock (UTC + the user's offset).
-assign rt_dt = trmnl.system.timestamp_utc | plus: trmnl.user.utc_offset | date: "%b %-d, %-I:%M %p"
-assign batt_pct = trmnl.device.percent_charged | round
-assign batt_fill = batt_pct | times: 16 | divided_by: 100
-assign show_dt = false
-assign show_batt = false
-assign custom_text = ""
-case trmnl.plugin_settings.custom_fields_values.title_bottom_right
-when "battery"
-assign show_batt = true
-when "date_time_and_battery"
-assign show_dt = true
-assign show_batt = true
-when "custom"
-assign custom_text = trmnl.plugin_settings.custom_fields_values.title_bottom_right_custom
-when "blank"
-assign show_dt = false
-else
-assign show_dt = true
-endcase
-%}
-
-<div class="layout layout--row layout--top g-scale-{{ font_size }} g-clamp{{ title_lines }}">
+<div class="layout layout--row layout--top g-scale-{{ font_size }}">
   <div class="columns gap--medium g-cols">
 
     <div class="column g-top {% if show_completed %}g-flex2{% else %}g-flex1{% endif %}">
@@ -100,7 +47,7 @@ endcase
       <div class="item">
         <div class="meta"><span class="g-check"></span></div>
         <div class="content g-content">
-          <span class="title title--small text--muted g-done g-name">{{ item.n }}</span>
+          <span class="title title--small text--muted g-done g-name">{{ item.title | default: item.n }}</span>
         </div>
       </div>
       {% endfor %}

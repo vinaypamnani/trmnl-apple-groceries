@@ -9,20 +9,22 @@ this page is for building it from scratch or understanding what it does.
 
 The Shortcut POSTs this JSON to your plugin's **Webhook URL**. Note the
 **`merge_variables` wrapper — TRMNL requires it**; the keys inside it become your
-template variables. Sending `pending`/`completed` at the top level (no wrapper)
+template variables. Sending `reminders`/`completed` at the top level (no wrapper)
 silently stores nothing.
 
 ```json
 {
   "merge_variables": {
-    "pending":   [ { "n": "Milk", "o": "2%" }, { "n": "Bananas", "o": "" } ],
+    "reminders": [ { "n": "Milk", "o": "2%" }, { "n": "Bananas", "o": "" } ],
     "completed": [ { "n": "Eggs" } ]
   }
 }
 ```
 
-`n` = name (required), `o` = note. Keep the payload under TRMNL's **2 kB**
-webhook limit (~40 pending + 12 completed is comfortable).
+`n` = name (required), `o` = note. Both payloads use the `reminders` key for the
+to-buy list; the Shortcut's `completed` array (and its short `n`/`o` item keys)
+is what enables the Completed column. Keep the payload under TRMNL's **2 kB**
+webhook limit (~40 to-buy + 12 completed is comfortable).
 
 ## Setup inputs
 
@@ -39,7 +41,7 @@ action, and a **Set Variable** captures it:
    → **Set Variable** `WebhookURL`.
 2. **Text** (empty) — bound to Setup question *"Which Reminders list holds your groceries?"*.
    → **Set Variable** `ListName`.
-3. **Find Reminders** (pending)
+3. **Find Reminders** (incomplete / to-buy)
    - **Where** `List` `is` the **`ListName`** variable — you *can* drop a variable
      into the List filter; that's how each user targets their own list without a
      hardcoded name.
@@ -49,7 +51,7 @@ action, and a **Set Variable** captures it:
    1. **Dictionary**:
       - `n` → Type Text → Repeat Item (its name)
       - `o` → Type Text → Repeat Item → **Notes**
-   2. **Add to Variable** `Pending`
+   2. **Add to Variable** `Reminders`
 5. **Find Reminders** (completed)
    - **Where** `List` `is` the **`ListName`** variable
    - **and** `Is Completed` `is` `true`
@@ -59,7 +61,7 @@ action, and a **Set Variable** captures it:
    1. **Dictionary**: `n` → Repeat Item (its name)
    2. **Add to Variable** `Completed`
 7. **Dictionary** (the payload body) — **this is the step that's easy to get wrong**:
-   - `pending`   → Type **Array** → Variable `Pending`
+   - `reminders` → Type **Array** → Variable `Reminders`
    - `completed` → Type **Array** → Variable `Completed`
 
    Both values **must** be type **Array**. If you leave them as **Text**, Shortcuts
@@ -80,11 +82,12 @@ action, and a **Set Variable** captures it:
 - **`merge_variables` is mandatory.** It's the single most common reason a webhook
   "succeeds" but nothing shows up in the TRMNL console — see TRMNL's
   [webhook docs](https://docs.trmnl.com/go/private-plugins/webhooks).
-- **`pending`/`completed` must be Array-typed** in the Dictionary action (step 7).
+- **`reminders`/`completed` must be Array-typed** in the Dictionary action (step 7).
   Text-typed values stringify the list.
-- **Empty lists are fine.** Sending only `pending` (no `completed`) still shows the
-  Completed column with "Nothing in cart yet"; sending only `completed` shows
-  "All shopped!" on the Pending side.
+- **Empty lists are fine.** The Shortcut view is auto-detected from the `completed`
+  key *or* the short `n`/`o` item keys, so sending `reminders` with no `completed`
+  still shows the Completed column with "Nothing in cart yet"; sending only
+  `completed` shows "All shopped!" on the Pending side.
 - **Stay under 2 kB.** The two `Limit` actions are what keep you there. Long lists
   trim on-device with an "and N more" indicator regardless.
 - **Running it:** trigger manually, from a Home Screen widget, or via a Personal

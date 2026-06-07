@@ -23,11 +23,13 @@ custom_fields:
 - keyname: list_source
   group: "Data Source"
   field_type: select
+  # TRMNL submits the lowercased, underscored option label as the value
+  # (e.g. "Auto" -> "auto"); the layouts match on those slugs.
   options:
     - "Auto"
     - "Shortcut"
     - "Companion"
-  default: companion
+  default: auto
   name: List Source
   description: How your groceries reach TRMNL. The Companion app needs no setup; the Apple Shortcut also enables the Completed column. Auto-detect picks the view from the incoming data.
   conditional_validation:
@@ -75,6 +77,8 @@ custom_fields:
 - keyname: title_bottom_right
   group: "Titles"
   field_type: select
+  # Values are the slugified labels ("Date and Time" -> "date_and_time"); the
+  # layouts' `case` matches on those slugs.
   options:
     - "Date and Time"
     - "Battery"
@@ -110,11 +114,3 @@ custom_fields:
   default: large
   name: Font Size
   description: 'Overall text size. Larger sizes are easier to read from a distance but show fewer items before "and N more".'
-- keyname: title_lines
-  group: "Display"
-  field_type: number
-  default: 1
-  min: 1
-  max: 4
-  name: Item Name Lines
-  description: Maximum lines an item name can wrap over before it's truncated.

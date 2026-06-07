@@ -13,10 +13,10 @@ What it produces (see docs/apple-shortcut.md for the human walkthrough):
   Setup question -> Text -> Set Variable WebhookURL
   Setup question -> Text -> Set Variable ListName
   Find Reminders  (List is {ListName}, Is Completed false, limit 40)
-    Repeat: Dictionary { n, o } -> add to Pending
+    Repeat: Dictionary { n, o } -> add to Reminders
   Find Reminders  (List is {ListName}, Is Completed true, limit 12)
     Repeat: Dictionary { n } -> add to Completed
-  Dictionary { pending: [Pending], completed: [Completed] }  (values typed Array)
+  Dictionary { reminders: [Reminders], completed: [Completed] }  (values typed Array)
     -> Set Variable mergeValues
   Get Contents of URL  POST {WebhookURL}  JSON  { merge_variables: {mergeValues} }
 
@@ -118,7 +118,7 @@ def build_actions():
         act("is.workflow.actions.gettext", {"UUID": U_LIST, "WFTextActionText": ""}),
         act("is.workflow.actions.setvariable",
             {"WFVariableName": "ListName", "WFInput": single_out(U_LIST, "Text")}),
-        # Pending: incomplete reminders in the chosen list
+        # Reminders: incomplete reminders in the chosen list
         act("is.workflow.actions.filter.reminders",
             {"UUID": U_FP, "WFContentItemFilter": content_filter([list_row(), completed_row(False)]),
              "WFContentItemSortProperty": "Creation Date", "WFContentItemSortOrder": "Oldest First",
@@ -131,7 +131,7 @@ def build_actions():
                 kv("n", text_token(ORC, {"{0, 1}": out_attach(U_RPS, "Repeat Item")})),
                 kv("o", text_token(ORC, {"{0, 1}": out_attach(U_RPS, "Repeat Item", NOTES)}))])}),
         act("is.workflow.actions.appendvariable",
-            {"WFVariableName": "Pending", "WFInput": single_out(U_DP, "Dictionary")}),
+            {"WFVariableName": "Reminders", "WFInput": single_out(U_DP, "Dictionary")}),
         act("is.workflow.actions.repeat.each",
             {"UUID": U_RPE, "GroupingIdentifier": G_RP, "WFControlFlowMode": 2}),
         # Completed: recently checked-off reminders in the chosen list
@@ -152,7 +152,7 @@ def build_actions():
         # Payload dictionary (values typed Array) -> mergeValues
         act("is.workflow.actions.dictionary",
             {"UUID": U_MV, "WFItems": dict_field([
-                kv("pending", array_var("Pending"), item_type=2),
+                kv("reminders", array_var("Reminders"), item_type=2),
                 kv("completed", array_var("Completed"), item_type=2)])}),
         act("is.workflow.actions.setvariable",
             {"WFVariableName": "mergeValues", "WFInput": single_out(U_MV, "Dictionary")}),

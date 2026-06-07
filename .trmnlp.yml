@@ -15,13 +15,14 @@ custom_fields:
   # title_bottom_right: date_and_time | battery | date_time_and_battery | custom | blank
   title_bottom_right: date_time_and_battery
   title_bottom_right_custom: Custom Label
-  title_lines: 1
   font_size: large
 
 # Sample webhook data for the local preview (`trmnlp serve`).
-# This mimics the TRMNL Companion app payload (pending-only `reminders`).
-# To preview the Apple Shortcut view instead, comment out `reminders` and supply
-# `pending:` / `completed:` arrays of { n, o } items.
+# Both payloads carry the to-buy list in `reminders`; this mimics the Companion
+# app (incomplete-only, { title, notes } items). To preview the Apple Shortcut
+# view instead, comment out the Companion `reminders` below and uncomment the
+# Shortcut `reminders` ({ n, o } items) + `completed` block — auto-detect keys on
+# the item shape and adds the Completed column.
 variables:
   trmnl:
     plugin_settings:
@@ -49,7 +50,7 @@ variables:
 
   # Apple Shortcut view: comment out `reminders` above, uncomment the two arrays
   # below. Items are { n: name, o: note (optional) }.
-  # pending:
+  # reminders:
   #   - { n: Gatorade }
   #   - { n: Chicken thighs, o: 'boneless, skinless' }
   #   - { n: Garam masala }

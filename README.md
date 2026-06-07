@@ -43,7 +43,7 @@ The first run pulls the `trmnl/trmnlp` Docker image (one-time, a few hundred MB)
 
 Edit `src/*.liquid`. Sample data and custom-field values for the preview live in
 `.trmnlp.yml` (defaults to the Companion `reminders` shape; swap in
-`pending`/`completed` to preview the Shortcut view).
+`{ n, o }`-shaped `reminders` + `completed` to preview the Shortcut view).
 
 ## Deploy to TRMNL
 
@@ -68,19 +68,20 @@ send. The Shortcut is a **superset** — it adds the Completed ("in cart") colum
 | | **Companion app** (Option A) | **Apple Shortcut** (Option B) |
 | --- | --- | --- |
 | Setup | Install app, toggle a list on — done | Import a Shortcut, paste webhook URL, set up automations |
-| Sends | `reminders` (incomplete only) | `pending` **and** `completed`, with notes |
+| Sends | `reminders` (incomplete only) | `reminders` **and** `completed`, with notes |
 | Completed column | ❌ no | ✅ yes ("Pending / Completed" cart view) |
 | Item notes | ✅ yes | ✅ yes |
 | Updates | Automatic, in the background | Only when the Shortcut runs (manual or via automation) |
 | Payload limit | Handled by the app | You stay under TRMNL's **2 kB** webhook limit |
 | Best for | Set-and-forget "to buy" list | A live cart showing what's checked off too |
 
-> Pick **one.** The layouts always prefer the Shortcut's `pending`/`completed`
-> and only fall back to the Companion's `reminders` when neither is present — so
-> if both ever send data, the Shortcut view takes precedence. The **List Source**
-> setting (below) defaults to **TRMNL Companion**; pick **Apple Shortcut** to reveal
-> the Shortcut/Webhook fields and the Completed column, or **Auto-detect** to choose
-> the view from whatever data arrives.
+> Pick **one.** Both POST the to-buy list in `reminders`; the Shortcut *also*
+> sends `completed` (and uses short `n`/`o` item keys), which is what adds the
+> Completed column. The **List Source** setting (below) defaults to
+> **Auto-detect**, which chooses the view from whatever data arrives (Completed
+> column when `completed` or `n`-keyed items are present); pick **TRMNL Companion**
+> or **Apple Shortcut** to force one — the latter also reveals the Shortcut/Webhook
+> fields.
 
 ### Option A · Companion app (recommended, no Shortcut)
 1. Install [TRMNL Companion](https://apps.apple.com/us/app/trmnl-companion/id6752111280).
@@ -110,33 +111,34 @@ first:
 
 ```json
 {
-  "pending":   [ { "n": "Bananas" }, { "n": "Milk", "o": "2%" } ],
+  "reminders": [ { "n": "Bananas" }, { "n": "Milk", "o": "2%" } ],
   "completed": [ { "n": "Eggs" } ]
 }
 ```
 `n` = name (required), `o` = note. Cap items so the payload stays
-under TRMNL's **2 kB** webhook limit (~40 pending + 12 completed is comfortable).
+under TRMNL's **2 kB** webhook limit (~40 to-buy + 12 completed is comfortable).
+The Companion app sends the same `reminders` key (with `{ title, notes }` items)
+and no `completed`, which is how the layouts tell the two apart.
 
 > **Why two lists instead of one tagged list (`c: true` for completed)?**
-> Separate `pending`/`completed` arrays are smaller on the wire (completed items
+> Separate `reminders`/`completed` arrays are smaller on the wire (completed items
 > carry no per-item discriminator), map directly onto how the Shortcut builds the
 > data (two "Find Reminders" filters), and split cleanly in Liquid — there's no
-> clean "where-not" to pull pending items back out of a single tagged list. A
+> clean "where-not" to pull incomplete items back out of a single tagged list. A
 > single list would only help if we rendered completed items *inline* among
-> pending ones, which the Pending/Completed column layout intentionally doesn't.
+> the to-buy ones, which the Pending/Completed column layout intentionally doesn't.
 
 ## Settings
 
 | Field | Effect |
 | --- | --- |
-| List Source | **TRMNL Companion** (default), **Apple Shortcut**, or **Auto-detect**. Picking Companion hides the Shortcut + Webhook fields below; Apple Shortcut reveals them and enables the Completed column. |
+| List Source | **Auto-detect** (default), **TRMNL Companion**, or **Apple Shortcut**. Auto picks the view from the incoming payload. Picking Companion hides the Shortcut + Webhook fields below; Apple Shortcut reveals them and enables the Completed column. |
 | Apple Shortcut *(optional)* | Copyable iCloud link to import the prebuilt Shortcut. **Shortcut only.** |
 | Webhook URL *(optional)* | POST target for the Shortcut method (Companion doesn't need it). |
 | Top Title | Heading at the top of the list. Blank = your Reminders list name. **Companion only** — the Shortcut always shows Pending/Completed. |
 | Bottom Bar (Right) | Bottom-bar right side: Date & Time, Battery, both, Custom text, or Blank. Date/time and battery use the device's own values. |
 | Custom Bottom-Right Text | Free text shown when Bottom Bar (Right) is **Custom**. |
 | Font Size | Regular / **Large** (default) / Extra Large — scales the whole layout. |
-| Item Name Lines | Max lines an item name wraps over (1–4); Full layout. |
 
 > The bottom bar's left always shows your plugin's instance name (with the Apple logo) — it isn't configurable.
 
