@@ -62,12 +62,16 @@ endcase
       {% else %}
       {% for item in pending_items %}
       {% assign name = item.title | default: item.n %}
+      {% assign note = item.notes | default: item.o %}
       <div class="item">
         <div class="meta">
           <span class="g-box"></span>
         </div>
         <div class="content g-content">
           <span class="title title--small g-name">{{ name }}</span>
+          {% if note != blank %}
+          <span class="description g-note">{{ note }}</span>
+          {% endif %}
         </div>
       </div>
       {% endfor %}
