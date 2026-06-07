@@ -38,13 +38,11 @@ custom_fields:
     - when: shortcut
       hidden:
         - title_top
-# TODO: replace `value` with the real iCloud link after sharing the Shortcut
-# (Shortcuts app -> Share -> Copy iCloud Link). See docs/apple-shortcut.md.
 - keyname: apple_shortcut_url
   field_type: copyable
   optional: true
   name: Apple Shortcut (optional)
-  value: "https://www.icloud.com/shortcuts/REPLACE_AFTER_SHARING"
+  value: "https://www.icloud.com/shortcuts/2d812f47d86a4f29a2d4dc5facdbd166"
   description: |-
     Optional, for the Apple Shortcut method. Import this Shortcut on your iPhone
     or iPad, then paste this plugin's Webhook URL (below) when it prompts you.
