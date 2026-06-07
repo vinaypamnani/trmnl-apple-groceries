@@ -15,8 +15,8 @@ locally and deploys to TRMNL from Git.
 
 | Layout | Shortcut view | Companion view |
 | --- | --- | --- |
-| Full | 2:1 Pending (2 sub-columns) + Completed | single "to buy" list (2 sub-columns) |
-| Half Horizontal | Compact 2:1, Pending in 2 sub-columns | single compact list |
+| Full | 2:1 Pending (2 sub-columns) + Completed | single "to buy" list (3 sub-columns) |
+| Half Horizontal | Compact 2:1, Pending in 2 sub-columns | single compact list (3 sub-columns) |
 | Half Vertical | Pending above Completed | single full-height list |
 | Quadrant | Pending + "✓ N done" footer | Pending + "N to buy" footer |
 

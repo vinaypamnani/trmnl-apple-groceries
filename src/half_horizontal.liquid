@@ -9,7 +9,7 @@
       {% if pending_items == empty %}
       <span class="description">All shopped!</span>
       {% else %}
-      <div class="columns gap--medium" data-overflow-max-cols="2" data-overflow-counter="true">
+      <div class="columns gap--medium" data-overflow-max-cols="{% if show_completed %}2{% else %}3{% endif %}" data-overflow-counter="true">
         <div class="column gap--small">
           {% for item in pending_items %}
           {% assign name = item.title | default: item.n %}

@@ -12,7 +12,7 @@
         <span class="description lg:description--large">Nothing left to buy.</span>
       </div>
       {% else %}
-      <div class="columns gap--large" data-overflow-max-cols="2" data-overflow-counter="true">
+      <div class="columns gap--large" data-overflow-max-cols="{% if show_completed %}2{% else %}3{% endif %}" data-overflow-counter="true">
         <div class="column gap--medium">
           {% for item in pending_items %}
           {% assign name = item.title | default: item.n %}
