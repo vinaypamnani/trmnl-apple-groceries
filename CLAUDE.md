@@ -34,9 +34,9 @@ in `src/`.
 **Dual data source (the central design constraint).** Both payloads carry the
 to-buy list in a single `reminders` array — only the item shape and the extra
 `completed` array differ:
-- **Shortcut** sends `reminders` + `completed` arrays of `{ n, o }`
-  (name / note). The `completed` array is the superset → enables the Completed
-  column. (Short keys keep it under 2 kB.)
+- **Shortcut** sends `reminders` + `completed` arrays of `{ t, n }`
+  (title / notes — the first letters of the Companion field names). The `completed`
+  array is the superset → enables the Completed column. (Short keys keep it under 2 kB.)
 - **Companion app** sends only `reminders`, of `{ title, notes, list_name }`
   (incomplete items only) → single "to buy" list, no Completed column.
 
@@ -44,10 +44,10 @@ to-buy list in a single `reminders` array — only the item shape and the extra
 inline (not via `render`), its opening `{% liquid %}` block assigns variables that
 are in scope for all four layout bodies. That block is the single home for the
 source resolution: it sets `pending_items = reminders` always and toggles
-`show_completed`, normalizing field names with `item.title | default: item.n` and
-`item.notes | default: item.o`. **The view follows the data, not the setting:**
+`show_completed`, normalizing field names with `item.title | default: item.t` and
+`item.notes | default: item.n`. **The view follows the data, not the setting:**
 `use_shortcut` (→ Completed column) is true when a `completed` array is present or
-items are `n`-keyed (`reminders.first.n`). `source_label` is the detected source
+items are `t`-keyed (`reminders.first.t`). `source_label` is the detected source
 ("TRMNL Companion"/"Apple Shortcuts"); every layout renders it as a centered "Data
 provided by …" footnote (`.g-footnote`, italic) at the bottom of the content, just
 above the title bar. To make room, the content block (`.g-cols` / `.g-half`) flex-grows and
@@ -87,12 +87,12 @@ they raise specificity to beat the TRMNL framework CSS, which loads before this
   title_bottom_right_custom, font_size). Note:
   `trmnlp pull` overwrites this file with the server copy.
 - `.trmnlp.yml` — **local dev only**, not uploaded. Holds sample webhook data for
-  the preview. Defaults to the Companion `reminders` shape; swap in `{ n, o }`
-  `reminders` items + a `completed:` array to preview the Shortcut view.
+  the preview. Defaults to the Companion `reminders` shape; add a `completed:`
+  array to preview the Shortcut view.
 
 ## Constraints
 
 - Webhook payloads must stay under TRMNL's **2 kB** limit (~40 to-buy + 12
-  completed items). Keep field names short on the Shortcut side (`n`/`o`).
+  completed items). Keep field names short on the Shortcut side (`t`/`n`).
 - Design for 1-bit e-ink: no color/grayscale, no animation. The outlined header
   "pill" uses a multi-direction `text-shadow` to fake an outline in pure B/W.

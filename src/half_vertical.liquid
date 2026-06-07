@@ -10,8 +10,8 @@
       <span class="description">All shopped!</span>
       {% else %}
       {% for item in pending_items %}
-      {% assign name = item.title | default: item.n %}
-      {% assign note = item.notes | default: item.o %}
+      {% assign name = item.title | default: item.t %}
+      {% assign note = item.notes | default: item.n %}
       <div class="item">
         <div class="meta">
           <span class="g-box"></span>
@@ -42,7 +42,7 @@
       <div class="item">
         <div class="meta"><span class="g-check"></span></div>
         <div class="content g-content">
-          <span class="title title--small text--muted g-done g-name">{{ item.title | default: item.n }}</span>
+          <span class="title title--small text--muted g-done g-name">{{ item.title | default: item.t }}</span>
         </div>
       </div>
       {% endfor %}

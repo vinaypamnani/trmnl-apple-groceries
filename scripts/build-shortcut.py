@@ -13,9 +13,9 @@ What it produces (see docs/apple-shortcut.md for the human walkthrough):
   Setup question -> Text -> Set Variable WebhookURL
   Setup question -> Text -> Set Variable ListName
   Find Reminders  (List is {ListName}, Is Completed false, limit 40)
-    Repeat: Dictionary { n, o } -> add to Reminders
+    Repeat: Dictionary { t, n } -> add to Reminders
   Find Reminders  (List is {ListName}, Is Completed true, limit 12)
-    Repeat: Dictionary { n } -> add to Completed
+    Repeat: Dictionary { t } -> add to Completed
   Dictionary { reminders: [Reminders], completed: [Completed] }  (values typed Array)
     -> Set Variable mergeValues
   Get Contents of URL  POST {WebhookURL}  JSON  { merge_variables: {mergeValues} }
@@ -128,8 +128,8 @@ def build_actions():
              "WFInput": single_out(U_FP, "Reminders")}),
         act("is.workflow.actions.dictionary",
             {"UUID": U_DP, "WFItems": dict_field([
-                kv("n", text_token(ORC, {"{0, 1}": out_attach(U_RPS, "Repeat Item")})),
-                kv("o", text_token(ORC, {"{0, 1}": out_attach(U_RPS, "Repeat Item", NOTES)}))])}),
+                kv("t", text_token(ORC, {"{0, 1}": out_attach(U_RPS, "Repeat Item")})),
+                kv("n", text_token(ORC, {"{0, 1}": out_attach(U_RPS, "Repeat Item", NOTES)}))])}),
         act("is.workflow.actions.appendvariable",
             {"WFVariableName": "Reminders", "WFInput": single_out(U_DP, "Dictionary")}),
         act("is.workflow.actions.repeat.each",
@@ -144,7 +144,7 @@ def build_actions():
              "WFInput": single_out(U_FC, "Reminders")}),
         act("is.workflow.actions.dictionary",
             {"UUID": U_DC, "WFItems": dict_field([
-                kv("n", text_token(ORC, {"{0, 1}": out_attach(U_RCS, "Repeat Item")}))])}),
+                kv("t", text_token(ORC, {"{0, 1}": out_attach(U_RCS, "Repeat Item")}))])}),
         act("is.workflow.actions.appendvariable",
             {"WFVariableName": "Completed", "WFInput": single_out(U_DC, "Dictionary")}),
         act("is.workflow.actions.repeat.each",

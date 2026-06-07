@@ -18,7 +18,7 @@ assign font_size = trmnl.plugin_settings.custom_fields_values.font_size | defaul
 # — the footnote always shows it as "Data provided by …". The List Source setting
 # (`list_source`) doesn't affect rendering; it only tailors the form (settings.yml).
 assign use_shortcut = false
-if completed or reminders.first.n
+if completed or reminders.first.t
 assign use_shortcut = true
 endif
 assign source_label = "TRMNL Companion"

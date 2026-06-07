@@ -42,8 +42,8 @@ bin\trmnlp.cmd lint
 The first run pulls the `trmnl/trmnlp` Docker image (one-time, a few hundred MB).
 
 Edit `src/*.liquid`. Sample data and custom-field values for the preview live in
-`.trmnlp.yml` (defaults to the Companion `reminders` shape; swap in
-`{ n, o }`-shaped `reminders` + `completed` to preview the Shortcut view).
+`.trmnlp.yml` (defaults to the Companion `reminders` shape; add a `completed`
+array to preview the Shortcut view).
 
 ## Deploy to TRMNL
 
@@ -76,7 +76,7 @@ send. The Shortcut is a **superset** — it adds the Completed ("in cart") colum
 | Best for | Set-and-forget "to buy" list | A live cart showing what's checked off too |
 
 > Pick **one.** Both POST the to-buy list in `reminders`; the Shortcut *also*
-> sends `completed` (and uses short `n`/`o` item keys), which is what adds the
+> sends `completed` (and uses short `t`/`n` item keys), which is what adds the
 > Completed column. The **view auto-adapts to whatever data arrives** — you don't
 > have to keep a setting in sync. Set **List Source** (below) to match the one you
 > use anyway: it tailors the form (Companion hides the Shortcut/Webhook fields,
@@ -112,12 +112,14 @@ first:
 
 ```json
 {
-  "reminders": [ { "n": "Bananas" }, { "n": "Milk", "o": "2%" } ],
-  "completed": [ { "n": "Eggs" } ]
+  "reminders": [ { "t": "Bananas" }, { "t": "Milk", "n": "2%" } ],
+  "completed": [ { "t": "Eggs" } ]
 }
 ```
-`n` = name (required), `o` = note. Cap items so the payload stays
-under TRMNL's **2 kB** webhook limit (~40 to-buy + 12 completed is comfortable).
+`t` = title/name (required), `n` = note. The short keys are just the first
+letters of the Companion's `title`/`notes`, so the layouts read both with one
+fallback. Cap items so the payload stays under TRMNL's **2 kB** webhook limit
+(~40 to-buy + 12 completed is comfortable).
 The Companion app sends the same `reminders` key (with `{ title, notes }` items)
 and no `completed`, which is how the layouts tell the two apart.
 

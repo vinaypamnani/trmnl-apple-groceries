@@ -15,14 +15,15 @@ silently stores nothing.
 ```json
 {
   "merge_variables": {
-    "reminders": [ { "n": "Milk", "o": "2%" }, { "n": "Bananas", "o": "" } ],
-    "completed": [ { "n": "Eggs" } ]
+    "reminders": [ { "t": "Milk", "n": "2%" }, { "t": "Bananas", "n": "" } ],
+    "completed": [ { "t": "Eggs" } ]
   }
 }
 ```
 
-`n` = name (required), `o` = note. Both payloads use the `reminders` key for the
-to-buy list; the Shortcut's `completed` array (and its short `n`/`o` item keys)
+`t` = title/name (required), `n` = note — the first letters of the Companion's
+`title`/`notes`. Both payloads use the `reminders` key for the to-buy list; the
+Shortcut's `completed` array (and its short `t`/`n` item keys)
 is what enables the Completed column. Keep the payload under TRMNL's **2 kB**
 webhook limit (~40 to-buy + 12 completed is comfortable).
 
@@ -49,8 +50,8 @@ action, and a **Set Variable** captures it:
    - **Limit** 40 items.
 4. **Repeat with Each** (the Find Reminders result):
    1. **Dictionary**:
-      - `n` → Type Text → Repeat Item (its name)
-      - `o` → Type Text → Repeat Item → **Notes**
+      - `t` → Type Text → Repeat Item (its name)
+      - `n` → Type Text → Repeat Item → **Notes**
    2. **Add to Variable** `Reminders`
 5. **Find Reminders** (completed)
    - **Where** `List` `is` the **`ListName`** variable
@@ -58,7 +59,7 @@ action, and a **Set Variable** captures it:
    - **Limit** 12 items. *(Optional: add `Completion Date` `is in the last` `1`
      `day` and sort by `Completion Date`, Newest First, to show only recent buys.)*
 6. **Repeat with Each** (the second result):
-   1. **Dictionary**: `n` → Repeat Item (its name)
+   1. **Dictionary**: `t` → Repeat Item (its name)
    2. **Add to Variable** `Completed`
 7. **Dictionary** (the payload body) — **this is the step that's easy to get wrong**:
    - `reminders` → Type **Array** → Variable `Reminders`

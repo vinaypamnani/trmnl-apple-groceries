@@ -22,8 +22,8 @@ custom_fields:
 # Sample webhook data for the local preview (`trmnlp serve`). To switch views,
 # comment/uncomment the `completed:` block at the bottom: present → Shortcut view
 # (Pending + Completed), absent → Companion view (single to-buy list). The layouts
-# normalize item fields (`title`|`n`, `notes`|`o`); the real Shortcut sends short
-# `n`/`o` keys to stay under 2 kB, but rendering is identical either way.
+# normalize item fields (`title`|`t`, `notes`|`n`); the real Shortcut sends short
+# `t`/`n` keys to stay under 2 kB, but rendering is identical either way.
 variables:
   trmnl:
     plugin_settings:

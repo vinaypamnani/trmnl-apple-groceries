@@ -9,7 +9,7 @@
       <span class="description">All shopped!</span>
       {% else %}
       {% for item in pending_items %}
-      {% assign name = item.title | default: item.n %}
+      {% assign name = item.title | default: item.t %}
       <div class="item">
         <div class="meta"><span class="g-box"></span></div>
         <div class="content g-content">
