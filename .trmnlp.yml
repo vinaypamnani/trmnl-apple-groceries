@@ -35,6 +35,7 @@ variables:
       # The preview defaults to 0 (UTC); set a real offset here to test local time.
       time_zone_iana: America/Denver
       utc_offset: -21600   # MDT (-6h); seconds
+  # Long list on purpose, to exercise the sub-columns + "and N more" overflow.
   reminders:
     - { title: Gatorade, notes: '', list_name: Grocery List }
     - { title: Chicken thighs, notes: 'boneless, skinless', list_name: Grocery List }
@@ -44,14 +45,50 @@ variables:
     - { title: Sourdough loaf, notes: '', list_name: Grocery List }
     - { title: Baby spinach, notes: '', list_name: Grocery List }
     - { title: Greek yogurt, notes: 'plain, full fat', list_name: Grocery List }
-    - { title: Olive oil, notes: '', list_name: Grocery List }
-    - { title: Cheddar cheese, notes: '', list_name: Grocery List }
+    - { title: Olive oil, notes: 'extra virgin', list_name: Grocery List }
+    - { title: Cheddar cheese, notes: 'sharp', list_name: Grocery List }
     - { title: Coffee beans, notes: '', list_name: Grocery List }
     - { title: Roma tomatoes, notes: '', list_name: Grocery List }
+    - { title: Yellow onions, notes: '', list_name: Grocery List }
+    - { title: Garlic, notes: '', list_name: Grocery List }
+    - { title: Ginger, notes: '', list_name: Grocery List }
+    - { title: Basmati rice, notes: '', list_name: Grocery List }
+    - { title: Black beans, notes: '2 cans', list_name: Grocery List }
+    - { title: Pasta, notes: 'penne', list_name: Grocery List }
+    - { title: Marinara sauce, notes: '', list_name: Grocery List }
+    - { title: Parmesan, notes: '', list_name: Grocery List }
+    - { title: Butter, notes: 'unsalted', list_name: Grocery List }
+    - { title: Eggs, notes: 'dozen', list_name: Grocery List }
+    - { title: Orange juice, notes: '', list_name: Grocery List }
+    - { title: Apples, notes: 'Honeycrisp', list_name: Grocery List }
+    - { title: Avocados, notes: '', list_name: Grocery List }
+    - { title: Lemons, notes: '', list_name: Grocery List }
+    - { title: Carrots, notes: '', list_name: Grocery List }
+    - { title: Bell peppers, notes: '', list_name: Grocery List }
+    - { title: Broccoli, notes: '', list_name: Grocery List }
+    - { title: Ground beef, notes: '1 lb', list_name: Grocery List }
+    - { title: Salmon fillets, notes: '', list_name: Grocery List }
+    - { title: Tortillas, notes: 'flour', list_name: Grocery List }
+    - { title: Peanut butter, notes: '', list_name: Grocery List }
+    - { title: Honey, notes: '', list_name: Grocery List }
+    - { title: Oats, notes: 'rolled', list_name: Grocery List }
+    - { title: Almonds, notes: '', list_name: Grocery List }
+    - { title: Frozen peas, notes: '', list_name: Grocery List }
+    - { title: Ice cream, notes: 'vanilla', list_name: Grocery List }
+    - { title: Paper towels, notes: '', list_name: Grocery List }
+    - { title: Dish soap, notes: '', list_name: Grocery List }
   # Uncomment to preview the Shortcut view (adds the Completed column). The footnote
   # will then read "Data provided by Apple Shortcuts".
   # completed:
-  #   - { title: Eggs }
-  #   - { title: Butter }
-  #   - { title: Paper towels }
-  #   - { title: Orange juice }
+  #   - { title: Sparkling water }
+  #   - { title: Tomato paste }
+  #   - { title: Cucumbers }
+  #   - { title: Hummus }
+  #   - { title: Bagels }
+  #   - { title: Cream cheese }
+  #   - { title: Maple syrup }
+  #   - { title: Granola }
+  #   - { title: Spinach wraps }
+  #   - { title: Cherry tomatoes }
+  #   - { title: Mozzarella }
+  #   - { title: Basil }
