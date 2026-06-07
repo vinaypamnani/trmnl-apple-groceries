@@ -40,19 +40,25 @@ to-buy list in a single `reminders` array — only the item shape and the extra
 - **Companion app** sends only `reminders`, of `{ title, notes, list_name }`
   (incomplete items only) → single "to buy" list, no Completed column.
 
-Each layout opens with a Liquid block that resolves the source into `use_shortcut`,
-sets `pending_items = reminders` always, and toggles `show_completed`, normalizing
-field names with `item.title | default: item.n` and `item.notes | default: item.o`.
-The **List Source** custom field (`list_source`) controls this: `auto` (default)
-detects from the payload — Shortcut when `completed` is present *or* items are
-`n`-keyed (`reminders.first.n`); `companion` and `shortcut` force the view. Because
-`pending_items` is always `reminders`, a forced view still renders the items; it
-only changes whether the Completed column shows (and the header style). The pending
-header reads `header_title` — the **Top Title** (`title_top`) when set, otherwise
-the list name (Companion) or "Pending" (Shortcut); `title_top` is **Companion-only**.
-The bottom bar's left is always the plugin's instance name. When editing one
-layout's detection/rendering logic, mirror the change across all four — they share
-this contract, not code.
+`src/shared.liquid` is auto-prepended to every layout, and because that happens
+inline (not via `render`), its opening `{% liquid %}` block assigns variables that
+are in scope for all four layout bodies. That block is the single home for the
+source resolution: it sets `pending_items = reminders` always and toggles
+`show_completed`, normalizing field names with `item.title | default: item.n` and
+`item.notes | default: item.o`. **The view follows the data, not the setting:**
+`use_shortcut` (→ Completed column) is true when a `completed` array is present or
+items are `n`-keyed (`reminders.first.n`). `source_label` is the detected source
+("TRMNL Companion"/"Apple Shortcuts"); every layout renders it as a centered "Data
+provided by …" footnote (`.g-footnote`, italic) at the bottom of the content, just
+above the title bar. To make room, the content block (`.g-cols` / `.g-half`) flex-grows and
+the layout root is a `layout--col`. The **List Source** custom field
+(`list_source`, `companion` default / `shortcut`) does **not** affect rendering —
+it only tailors the settings form (see Conditional fields). The pending header
+reads `header_title` — the **Top
+Title** (`title_top`) when set, otherwise the list name (Companion) or "Pending"
+(Shortcut); `title_top` is **Companion-only**. The bottom bar's left is always the
+plugin's instance name. The four layouts share this setup via `shared.liquid`;
+only their HTML bodies (and the duplicated footer markup) live per-file.
 
 **Conditional fields.** TRMNL select fields support `conditional_validation`
 (`when: <value>` → `hidden: [keynames]` and/or `required: [keynames]`). `list_source`

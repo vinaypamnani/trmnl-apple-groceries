@@ -84,10 +84,11 @@ action, and a **Set Variable** captures it:
   [webhook docs](https://docs.trmnl.com/go/private-plugins/webhooks).
 - **`reminders`/`completed` must be Array-typed** in the Dictionary action (step 7).
   Text-typed values stringify the list.
-- **Empty lists are fine.** The Shortcut view is auto-detected from the `completed`
-  key *or* the short `n`/`o` item keys, so sending `reminders` with no `completed`
-  still shows the Completed column with "Nothing in cart yet"; sending only
-  `completed` shows "All shopped!" on the Pending side.
+- **Empty lists are fine.** The Completed column appears whenever a `completed`
+  array is present (even empty), so sending `reminders` with an empty `completed`
+  still shows it with "Nothing in cart yet"; sending only `completed` shows "All
+  shopped!" on the Pending side. (Set **List Source** to *Apple Shortcut* too, so
+  the settings form fits the Shortcut method — the on-screen view adapts on its own.)
 - **Stay under 2 kB.** The two `Limit` actions are what keep you there. Long lists
   trim on-device with an "and N more" indicator regardless.
 - **Running it:** trigger manually, from a Home Screen widget, or via a Personal

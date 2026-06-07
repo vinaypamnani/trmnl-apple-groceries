@@ -1,7 +1,7 @@
 # Apple Groceries — TRMNL Plugin
 
-Display your Apple Reminders grocery list on a TRMNL device. The layouts
-auto-detect their data source, so you can feed them from **either**:
+Display your Apple Reminders grocery list on a TRMNL device. The layouts adapt to
+whichever data source you feed them — **either**:
 
 - the **TRMNL Companion iOS app** (recommended) — syncs your Reminders list
   automatically, nothing to build; shows your outstanding "to buy" items, or
@@ -77,11 +77,12 @@ send. The Shortcut is a **superset** — it adds the Completed ("in cart") colum
 
 > Pick **one.** Both POST the to-buy list in `reminders`; the Shortcut *also*
 > sends `completed` (and uses short `n`/`o` item keys), which is what adds the
-> Completed column. The **List Source** setting (below) defaults to
-> **Auto-detect**, which chooses the view from whatever data arrives (Completed
-> column when `completed` or `n`-keyed items are present); pick **TRMNL Companion**
-> or **Apple Shortcut** to force one — the latter also reveals the Shortcut/Webhook
-> fields.
+> Completed column. The **view auto-adapts to whatever data arrives** — you don't
+> have to keep a setting in sync. Set **List Source** (below) to match the one you
+> use anyway: it tailors the form (Companion hides the Shortcut/Webhook fields,
+> Apple Shortcut reveals them). A footnote at the bottom of the screen always
+> notes the detected source ("Data provided by …"), so what's driving the view is
+> never in doubt.
 
 ### Option A · Companion app (recommended, no Shortcut)
 1. Install [TRMNL Companion](https://apps.apple.com/us/app/trmnl-companion/id6752111280).
@@ -132,7 +133,7 @@ and no `completed`, which is how the layouts tell the two apart.
 
 | Field | Effect |
 | --- | --- |
-| List Source | **Auto-detect** (default), **TRMNL Companion**, or **Apple Shortcut**. Auto picks the view from the incoming payload. Picking Companion hides the Shortcut + Webhook fields below; Apple Shortcut reveals them and enables the Completed column. |
+| List Source | **TRMNL Companion** (default) or **Apple Shortcut** — pick the one you use. Only tailors the form (Companion hides the Shortcut + Webhook fields); the view auto-adapts to the incoming data, and a footnote at the bottom notes the detected source ("Data provided by …"). |
 | Apple Shortcut *(optional)* | Copyable iCloud link to import the prebuilt Shortcut. **Shortcut only.** |
 | Webhook URL *(optional)* | POST target for the Shortcut method (Companion doesn't need it). |
 | Top Title | Heading at the top of the list. Blank = your Reminders list name. **Companion only** — the Shortcut always shows Pending/Completed. |

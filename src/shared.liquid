@@ -12,25 +12,24 @@ unset (line-clamp, min-width, etc.).
 {% liquid
 assign font_size = trmnl.plugin_settings.custom_fields_values.font_size | default: "large"
 
-# Both payloads carry the to-buy list in `reminders`. The Shortcut also sends a
-# `completed` array (with short `n`/`o` item keys), which adds the Completed column.
-# List Source: "shortcut"/"companion" force a view; "auto" (default) detects from
-# the payload — Completed column when `completed` or `n`-keyed items are present.
-assign source = trmnl.plugin_settings.custom_fields_values.list_source | default: "auto"
+# The VIEW follows the data shape, not the setting: a `completed` array or
+# `n`-keyed items means the Shortcut payload, which adds the Completed column.
+# `source_label` names the detected source ("TRMNL Companion" / "Apple Shortcuts")
+# — the footnote always shows it as "Data provided by …". The List Source setting
+# (`list_source`) doesn't affect rendering; it only tailors the form (settings.yml).
 assign use_shortcut = false
-if source == "shortcut"
-assign use_shortcut = true
-elsif source == "auto"
 if completed or reminders.first.n
 assign use_shortcut = true
 endif
+assign source_label = "TRMNL Companion"
+if use_shortcut
+assign source_label = "Apple Shortcuts"
 endif
 
 assign pending_items = reminders
 if use_shortcut
 assign show_completed = true
-assign pending_label = "Pending"
-assign header_title = pending_label
+assign header_title = "Pending"
 else
 assign show_completed = false
 assign pending_label = reminders.first.list_name | default: "Groceries"
@@ -63,8 +62,8 @@ assign show_dt = true
 endcase
 %}
 <style>
-  /* layout sizing */
-  .columns.g-cols { height: 100%; align-items: stretch; }
+  /* layout sizing — g-cols grows to fill so the footnote can sit below it */
+  .columns.g-cols { flex: 1 1 0; min-height: 0; align-items: stretch; }
   .columns.g-half { flex: 1 1 0; min-height: 0; overflow: hidden; }
   .column.g-top { justify-content: flex-start; }
   .column.g-flex2 { flex: 2 1 0; }
@@ -137,6 +136,10 @@ endcase
      aware text-stroke (paint-order stroke fill) both flip with the theme. */
   .g-pill { border-radius: 8px; background: var(--bg-gray-70-color, transparent) var(--bg-gray-70-image, none) repeat center / var(--dither-bg-size, auto); }
   .title.g-pill-text { -webkit-text-stroke: 2px var(--framework-stroke-contrast); paint-order: stroke fill; }
+
+  /* "Data provided by …" attribution footnote (centering/size come from framework
+     classes on the element; this only adds the italic note styling). */
+  .g-footnote { font-style: italic; }
 
   /* Font Size setting -> overall UI scale */
   .g-scale-regular { --ui-scale: 1; }

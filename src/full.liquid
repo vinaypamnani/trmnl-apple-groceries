@@ -1,4 +1,4 @@
-<div class="layout layout--row layout--top g-scale-{{ font_size }}">
+<div class="layout layout--col layout--top g-scale-{{ font_size }}">
   <div class="columns gap--medium g-cols">
 
     <div class="column g-top {% if show_completed %}g-flex2{% else %}g-flex1{% endif %}">
@@ -56,6 +56,7 @@
     {% endif %}
 
   </div>
+  <div class="description text--center p--1 g-footnote">Data provided by {{ source_label }}</div>
 </div>
 
 <div class="title_bar">

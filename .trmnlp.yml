@@ -9,7 +9,9 @@ watch:
 
 # Values for the custom fields defined in src/settings.yml.
 custom_fields:
-  # list_source: auto | shortcut | companion
+  # The view follows the DATA (the `completed:` block below), not this setting —
+  # `list_source` only tailors the settings form. The footer always shows a
+  # "Data provided by …" footnote naming the detected source.
   list_source: companion
   title_top: Groceries            # Companion only; blank = Reminders list name
   # title_bottom_right: date_and_time | battery | date_time_and_battery | custom | blank
@@ -17,12 +19,11 @@ custom_fields:
   title_bottom_right_custom: Custom Label
   font_size: large
 
-# Sample webhook data for the local preview (`trmnlp serve`).
-# Both payloads carry the to-buy list in `reminders`; this mimics the Companion
-# app (incomplete-only, { title, notes } items). To preview the Apple Shortcut
-# view instead, comment out the Companion `reminders` below and uncomment the
-# Shortcut `reminders` ({ n, o } items) + `completed` block — auto-detect keys on
-# the item shape and adds the Completed column.
+# Sample webhook data for the local preview (`trmnlp serve`). To switch views,
+# comment/uncomment the `completed:` block at the bottom: present → Shortcut view
+# (Pending + Completed), absent → Companion view (single to-buy list). The layouts
+# normalize item fields (`title`|`n`, `notes`|`o`); the real Shortcut sends short
+# `n`/`o` keys to stay under 2 kB, but rendering is identical either way.
 variables:
   trmnl:
     plugin_settings:
@@ -47,24 +48,10 @@ variables:
     - { title: Cheddar cheese, notes: '', list_name: Grocery List }
     - { title: Coffee beans, notes: '', list_name: Grocery List }
     - { title: Roma tomatoes, notes: '', list_name: Grocery List }
-
-  # Apple Shortcut view: comment out `reminders` above, uncomment the two arrays
-  # below. Items are { n: name, o: note (optional) }.
-  # reminders:
-  #   - { n: Gatorade }
-  #   - { n: Chicken thighs, o: 'boneless, skinless' }
-  #   - { n: Garam masala }
-  #   - { n: Whole milk, o: '2% if no whole' }
-  #   - { n: Bananas }
-  #   - { n: Sourdough loaf }
-  #   - { n: Baby spinach }
-  #   - { n: Greek yogurt, o: 'plain, full fat' }
-  #   - { n: Olive oil }
-  #   - { n: Cheddar cheese }
-  #   - { n: Coffee beans }
-  #   - { n: Roma tomatoes }
+  # Uncomment to preview the Shortcut view (adds the Completed column). The footnote
+  # will then read "Data provided by Apple Shortcuts".
   # completed:
-  #   - { n: Eggs }
-  #   - { n: Butter }
-  #   - { n: Paper towels }
-  #   - { n: Orange juice }
+  #   - { title: Eggs }
+  #   - { title: Butter }
+  #   - { title: Paper towels }
+  #   - { title: Orange juice }

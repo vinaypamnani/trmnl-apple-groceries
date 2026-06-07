@@ -24,23 +24,19 @@ custom_fields:
   group: "Data Source"
   field_type: select
   # TRMNL submits the lowercased, underscored option label as the value
-  # (e.g. "Auto" -> "auto"); the layouts match on those slugs.
+  # (e.g. "Companion" -> "companion"); the layouts match on those slugs.
   options:
-    - "Auto"
-    - "Shortcut"
     - "Companion"
-  default: auto
+    - "Shortcut"
+  default: companion
   name: List Source
-  description: How your groceries reach TRMNL. The Companion app needs no setup; the Apple Shortcut also enables the Completed column. Auto-detect picks the view from the incoming data.
+  description: Which source you use. This only tailors the fields below — the view itself auto-adapts to the data received (the Shortcut's payload adds the Completed column), and a footnote at the bottom of the screen always notes the detected source ("Data provided by …"). The Companion app needs no setup.
   conditional_validation:
     - when: companion
       hidden:
         - apple_shortcut_url
         - webhook_url
     - when: shortcut
-      hidden:
-        - title_top
-    - when: auto
       hidden:
         - title_top
 # TODO: replace `value` with the real iCloud link after sharing the Shortcut
