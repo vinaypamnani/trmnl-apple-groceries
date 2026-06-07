@@ -98,10 +98,9 @@ Companion payload).
 
 **Quick start — import the prebuilt Shortcut:**
 
-1. In this plugin's settings, open the **Apple Shortcut** field and tap the link
-   on your iPhone to **Add Shortcut**.
-2. On import it asks for your **Webhook URL** — paste the one from this plugin's
-   settings (the Option B field).
+1. Set **List Source** to **Apple Shortcut** to reveal the **Webhook URL** field;
+   its description has the iCloud link to **Add Shortcut** — tap it on your iPhone.
+2. On import it asks for your **Webhook URL** — paste the one from that same field.
 3. Run it manually, or attach a Home Screen widget / Personal Automation so it
    syncs on a schedule. It POSTs your pending + recently-completed items.
 
@@ -135,9 +134,8 @@ and no `completed`, which is how the layouts tell the two apart.
 
 | Field | Effect |
 | --- | --- |
-| List Source | **TRMNL Companion** (default) or **Apple Shortcut** — pick the one you use. Only tailors the form (Companion hides the Shortcut + Webhook fields); the view auto-adapts to the incoming data, and a footnote at the bottom notes the detected source ("Data provided by …"). |
-| Apple Shortcut *(optional)* | Copyable iCloud link to import the prebuilt Shortcut. **Shortcut only.** |
-| Webhook URL *(optional)* | POST target for the Shortcut method (Companion doesn't need it). |
+| List Source | **TRMNL Companion** (default) or **Apple Shortcut** — pick the one you use. Only tailors the form (Companion hides the Webhook URL field); the view auto-adapts to the incoming data, and a footnote at the bottom notes the detected source ("Data provided by …"). |
+| Webhook URL *(optional)* | POST target for the Shortcut method; its description has the iCloud link to import the prebuilt Shortcut. **Shortcut only** (Companion doesn't need it). |
 | Top Title | Heading at the top of the list. Blank = your Reminders list name. **Companion only** — the Shortcut always shows Pending/Completed. |
 | Bottom Bar (Right) | Bottom-bar right side: Date & Time, Battery, both, Custom text, or Blank. Date/time and battery use the device's own values. |
 | Custom Bottom-Right Text | Free text shown when Bottom Bar (Right) is **Custom**. |

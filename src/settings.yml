@@ -18,8 +18,10 @@ custom_fields:
 - keyname: about
   name: About This Plugin
   field_type: author_bio
-  description: Show your Apple Reminders grocery list on TRMNL. Feed it from the TRMNL Companion iOS app (recommended, no setup) or an Apple Shortcut.
+  category: life
+  description: Show your Apple Reminders grocery list on TRMNL. Feed it from the TRMNL Companion iOS app (recommended, no setup) or an Apple Shortcut (import link & setup in the guide).
   github_url: https://github.com/vinaypamnani/trmnl-apple-groceries
+  learn_more_url: https://github.com/vinaypamnani/trmnl-apple-groceries/blob/main/docs/apple-shortcut.md
 - keyname: list_source
   field_type: select
   # TRMNL submits the lowercased, underscored option label as the value
@@ -33,30 +35,20 @@ custom_fields:
   conditional_validation:
     - when: companion
       hidden:
-        - apple_shortcut_url
         - webhook_url
     - when: shortcut
       hidden:
         - title_top
-- keyname: apple_shortcut_url
-  field_type: copyable
-  optional: true
-  name: Apple Shortcut (optional)
-  value: "https://www.icloud.com/shortcuts/2d812f47d86a4f29a2d4dc5facdbd166"
-  description: |-
-    Optional, for the Apple Shortcut method. Import this Shortcut on your iPhone
-    or iPad, then paste this plugin's Webhook URL (below) when it prompts you.
-    Tip: add automations so it runs on a schedule and when Reminders closes, so
-    your TRMNL stays current. The Companion app doesn't need this.
 - keyname: webhook_url
   field_type: copyable_webhook_url
   optional: true
   name: Webhook URL (optional)
   description: >-
     Apple Shortcut method only — the Companion app doesn't need this. Import the
-    Shortcut from the "Apple Shortcut" field above and paste this URL when
-    prompted. Payload format and a build-your-own guide:
-    https://github.com/vinaypamnani/trmnl-apple-groceries
+    prebuilt Shortcut (https://www.icloud.com/shortcuts/2d812f47d86a4f29a2d4dc5facdbd166),
+    then paste this URL when it prompts you. Add automations so it runs on a
+    schedule and when Reminders closes, to keep TRMNL current. Payload format and
+    a build-your-own guide: https://github.com/vinaypamnani/trmnl-apple-groceries
   help_text: This will populate once the plugin has been created/saved.
 - keyname: title_top
   field_type: string

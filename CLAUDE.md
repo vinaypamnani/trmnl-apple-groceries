@@ -62,8 +62,8 @@ only their HTML bodies (and the duplicated footer markup) live per-file.
 
 **Conditional fields.** TRMNL select fields support `conditional_validation`
 (`when: <value>` → `hidden: [keynames]` and/or `required: [keynames]`). `list_source`
-uses it to hide `apple_shortcut_url` / `webhook_url` when `companion` is selected,
-and to hide `title_top` unless `companion` is selected. Hideable fields are marked `optional: true` so
+uses it to hide `webhook_url` when `companion` is selected, and to hide `title_top`
+unless `companion` is selected. Hideable fields are marked `optional: true` so
 the form saves while hidden. This only affects the settings UI, not rendering.
 
 **Shared styles.** `src/shared.liquid` holds all CSS and is auto-prepended to each
