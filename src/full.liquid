@@ -91,7 +91,7 @@ endcase
     <div class="column g-top g-flex1" data-list-limit="true" data-list-hidden-count="true">
       <div class="bg--backdrop p--1 text--center g-pill">
         {% assign cc = completed | size %}
-        <span class="title g-pill-text">Completed · {{ cc }} item{% if cc != 1 %}s{% endif %}</span>
+        <span class="title g-pill-text g-bag">Completed · {{ cc }} item{% if cc != 1 %}s{% endif %}</span>
       </div>
       {% if completed == empty %}
       <span class="description">Nothing in cart yet.</span>

@@ -32,14 +32,17 @@ properties the framework leaves unset (line-clamp, min-width, etc.).
 
   /* title-bar icons (clock + battery) and the header cart sit just left of their
      text; one shared gap rule keeps the framework lint's style-count low */
-  .g-ico-clock::before, .g-batt, .g-cart::before { margin-right: 0.3em; vertical-align: -0.12em; }
+  .g-ico-clock::before, .g-batt, .g-cart::before, .g-bag::before { margin-right: 0.3em; vertical-align: -0.12em; }
   .g-ico-clock::before {
     content: ""; display: inline-block; width: 0.95em; height: 0.95em;
     background: center / contain no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTEyIDYgVjEyIEgxNyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg=="); }
-  /* cart glyph for the header — white, for the solid-black bar */
+  /* header glyphs (dark, for the light gray pill): cart = to-buy, bag = bought */
   .g-cart::before {
     content: ""; display: inline-block; width: 1.05em; height: 1.05em;
     background: center / contain no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEgMmgzLjVsMi4zIDEyLjJhMS42IDEuNiAwIDAgMCAxLjYgMS4zaDkuMWExLjYgMS42IDAgMCAwIDEuNi0xLjNMMjEuNSA3SDYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxjaXJjbGUgY3g9IjkuNSIgY3k9IjIwIiByPSIxLjciIGZpbGw9IiMwMDAiLz48Y2lyY2xlIGN4PSIxOC41IiBjeT0iMjAiIHI9IjEuNyIgZmlsbD0iIzAwMCIvPjwvc3ZnPg=="); }
+  .g-bag::before {
+    content: ""; display: inline-block; width: 1.05em; height: 1.05em;
+    background: center / contain no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTYgMkwzIDZ2MTRhMiAyIDAgMCAwIDIgMmgxNGEyIDIgMCAwIDAgMi0yVjZsLTMtNHoiLz48bGluZSB4MT0iMyIgeTE9IjYiIHgyPSIyMSIgeTI9IjYiLz48cGF0aCBkPSJNMTYgMTBhNCA0IDAgMCAxLTggMCIvPjwvc3ZnPg=="); }
   .g-batt { display: inline-block; width: 1.6em; height: 0.9em; }
 
   /* Checklist rows: the framework stretches .item and vertically-centers .meta,
