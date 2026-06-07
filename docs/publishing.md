@@ -28,44 +28,19 @@ your own real grocery list separately.
    **List Source → Apple Shortcut** (so the demo payload below matches and you get
    the richest view — Pending + Completed — with no "fallback" footnote).
 4. **Seed demo data.** Copy the master's **Webhook URL** (from the Webhook URL
-   field) and POST the clean demo payload (see below), then **force-refresh** the
-   plugin (portal: the plugin's refresh, or refresh on a paired device).
+   field) and run the seeder, then **force-refresh** the plugin (portal: the
+   plugin's refresh, or refresh on a paired device):
+
+   ```sh
+   scripts/seed-demo-data.sh "<MASTER_WEBHOOK_URL>"
+   ```
+
+   It POSTs a clean ~25 to-buy + 6 completed sample list (≈0.8 kB). Edit the
+   payload in that script if you want different demo items.
 5. **Eyeball the preview** in the portal — confirm it renders the demo list nicely
    across the layout(s) you care about.
 6. **Publish** from the portal. Author bio already has a contact (`github_url`) and a
    `category`, which the publish check requires.
-
-### Demo payload (clean, ~16 to-buy + 4 done, well under 2 kB)
-
-```sh
-curl -X POST "<MASTER_WEBHOOK_URL>" \
-  -H "Content-Type: application/json" \
-  -d '{"merge_variables":{
-    "reminders":[
-      {"t":"Bananas"},
-      {"t":"Whole milk","n":"2% if no whole"},
-      {"t":"Sourdough loaf"},
-      {"t":"Baby spinach"},
-      {"t":"Greek yogurt","n":"plain, full fat"},
-      {"t":"Olive oil","n":"extra virgin"},
-      {"t":"Cheddar cheese","n":"sharp"},
-      {"t":"Coffee beans"},
-      {"t":"Roma tomatoes"},
-      {"t":"Yellow onions"},
-      {"t":"Garlic"},
-      {"t":"Eggs","n":"dozen"},
-      {"t":"Avocados"},
-      {"t":"Honeycrisp apples"},
-      {"t":"Chicken thighs","n":"boneless, skinless"},
-      {"t":"Basmati rice"}
-    ],
-    "completed":[
-      {"t":"Butter"},{"t":"Paper towels"},{"t":"Orange juice"},{"t":"Bagels"}
-    ]
-  }}'
-```
-
-`<MASTER_WEBHOOK_URL>` = the value shown in the master's **Webhook URL** field.
 
 > Keep the master pointed at this demo data. **Don't** connect your Companion app or
 > run your real Shortcut against the master — that would overwrite the preview with
