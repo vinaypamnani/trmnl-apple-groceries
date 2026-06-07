@@ -69,6 +69,7 @@ custom_fields:
   group: "Titles"
   field_type: string
   optional: true
+  default: ''
   name: Top Title
   description: Heading at the top of the list — Companion app only. Leave blank to use your Reminders list name. (The Apple Shortcut always shows Pending/Completed; the bottom bar always shows your plugin's name.)
 - keyname: title_bottom_right
@@ -80,7 +81,7 @@ custom_fields:
     - "Date Time and Battery"
     - "Custom"
     - "Blank"
-  default: date_and_time
+  default: date_time_and_battery
   name: Bottom Bar (Right)
   description: 'What to show on the right of the bottom bar. Date/time uses your device''s local time; "Custom" shows the text you enter below.'
   conditional_validation:
@@ -96,6 +97,7 @@ custom_fields:
   group: "Titles"
   field_type: string
   optional: true
+  default: ''
   name: Custom Bottom-Right Text
   description: Shown only when "Bottom Bar (Right)" is set to Custom. Leave blank to hide.
 - keyname: font_size
