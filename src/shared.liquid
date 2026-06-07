@@ -30,19 +30,19 @@ properties the framework leaves unset (line-clamp, min-width, etc.).
 
   /* Apple logo in the title bar uses the framework's .image slot (see layouts) */
 
-  /* title-bar icons (clock + battery) and the header cart sit just left of their
-     text; one shared gap rule keeps the framework lint's style-count low */
+  /* title-bar / header glyphs (clock, cart, bag) are MASKS filled with the
+     framework text colour, so they flip black->white in dark mode like the rest of
+     the UI. The battery is an inline <svg> using currentColor (adapts the same way).
+     One shared gap rule keeps the framework lint's style-count low. */
   .g-ico-clock::before, .g-batt, .g-cart::before, .g-bag::before { margin-right: 0.3em; vertical-align: -0.12em; }
-  .g-ico-clock::before {
-    content: ""; display: inline-block; width: 0.95em; height: 0.95em;
-    background: center / contain no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTEyIDYgVjEyIEgxNyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg=="); }
-  /* header glyphs (dark, for the light gray pill): cart = to-buy, bag = bought */
-  .g-cart::before {
-    content: ""; display: inline-block; width: 1.05em; height: 1.05em;
-    background: center / contain no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEgMmgzLjVsMi4zIDEyLjJhMS42IDEuNiAwIDAgMCAxLjYgMS4zaDkuMWExLjYgMS42IDAgMCAwIDEuNi0xLjNMMjEuNSA3SDYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxjaXJjbGUgY3g9IjkuNSIgY3k9IjIwIiByPSIxLjciIGZpbGw9IiMwMDAiLz48Y2lyY2xlIGN4PSIxOC41IiBjeT0iMjAiIHI9IjEuNyIgZmlsbD0iIzAwMCIvPjwvc3ZnPg=="); }
-  .g-bag::before {
-    content: ""; display: inline-block; width: 1.05em; height: 1.05em;
-    background: center / contain no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTYgMkwzIDZ2MTRhMiAyIDAgMCAwIDIgMmgxNGEyIDIgMCAwIDAgMi0yVjZsLTMtNHoiLz48bGluZSB4MT0iMyIgeTE9IjYiIHgyPSIyMSIgeTI9IjYiLz48cGF0aCBkPSJNMTYgMTBhNCA0IDAgMCAxLTggMCIvPjwvc3ZnPg=="); }
+  .g-ico-clock::before, .g-cart::before, .g-bag::before {
+    content: ""; display: inline-block; background: var(--framework-text-primary);
+    -webkit-mask: center / contain no-repeat var(--g-icon);
+    mask: center / contain no-repeat var(--g-icon);
+  }
+  .g-ico-clock::before { width: 0.95em; height: 0.95em; --g-icon: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTEyIDYgVjEyIEgxNyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg=="); }
+  .g-cart::before { width: 1.05em; height: 1.05em; --g-icon: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEgMmgzLjVsMi4zIDEyLjJhMS42IDEuNiAwIDAgMCAxLjYgMS4zaDkuMWExLjYgMS42IDAgMCAwIDEuNi0xLjNMMjEuNSA3SDYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxjaXJjbGUgY3g9IjkuNSIgY3k9IjIwIiByPSIxLjciIGZpbGw9IiMwMDAiLz48Y2lyY2xlIGN4PSIxOC41IiBjeT0iMjAiIHI9IjEuNyIgZmlsbD0iIzAwMCIvPjwvc3ZnPg=="); }
+  .g-bag::before { width: 1.05em; height: 1.05em; --g-icon: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTYgMkwzIDZ2MTRhMiAyIDAgMCAwIDIgMmgxNGEyIDIgMCAwIDAgMi0yVjZsLTMtNHoiLz48bGluZSB4MT0iMyIgeTE9IjYiIHgyPSIyMSIgeTI9IjYiLz48cGF0aCBkPSJNMTYgMTBhNCA0IDAgMCAxLTggMCIvPjwvc3ZnPg=="); }
   .g-batt { display: inline-block; width: 1.6em; height: 0.9em; }
 
   /* Checklist rows: the framework stretches .item and vertically-centers .meta,
@@ -61,14 +61,25 @@ properties the framework leaves unset (line-clamp, min-width, etc.).
     display: inline-block;
     box-sizing: border-box;
     width: 0.8em; height: 0.8em;
-    border: 0.14em solid currentColor;
+    border: 0.14em solid var(--framework-text-primary);
     border-radius: 3px;
   }
+  /* checked-off item: filled box + tick. Light = black box/white tick; dark mode
+     swaps to white box/black tick so it stays the inverse of the empty box. */
+  .g-check {
+    display: inline-block;
+    width: 0.8em; height: 0.8em;
+    background: center / contain no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHJlY3QgeD0iMSIgeT0iMSIgd2lkdGg9IjIyIiBoZWlnaHQ9IjIyIiByeD0iNSIgZmlsbD0iIzAwMCIvPjxwYXRoIGQ9Ik02LjUgMTIuNWwzLjUgMy41IDctOCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+");
+  }
+  .screen--dark-mode .g-check {
+    background: center / contain no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHJlY3QgeD0iMSIgeT0iMSIgd2lkdGg9IjIyIiBoZWlnaHQ9IjIyIiByeD0iNSIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik02LjUgMTIuNWwzLjUgMy41IDctOCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIuNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+");
+  }
 
-  /* header pill matches the footer: light gray-70 dither backdrop + dark text with
-     the framework's crisp white text-stroke (paint-order stroke fill), not a shadow. */
-  .g-pill { border-radius: 8px; background-color: var(--gray-70); }
-  .title.g-pill-text { -webkit-text-stroke: 2px var(--white); paint-order: stroke fill; }
+  /* header pill mirrors the footer (.title_bar) using the SAME framework vars, so it
+     adapts to dark/light identically: the gray-70 dither backdrop and the contrast-
+     aware text-stroke (paint-order stroke fill) both flip with the theme. */
+  .g-pill { border-radius: 8px; background: var(--bg-gray-70-color, transparent) var(--bg-gray-70-image, none) repeat center / var(--dither-bg-size, auto); }
+  .title.g-pill-text { -webkit-text-stroke: 2px var(--framework-stroke-contrast); paint-order: stroke fill; }
 
   /* Font Size setting -> overall UI scale */
   .g-scale-regular { --ui-scale: 1; }
