@@ -19,24 +19,32 @@ custom_fields:
   name: About This Plugin
   field_type: author_bio
   category: life
-  description: Show your Apple Reminders grocery list on TRMNL. Feed it from the TRMNL Companion iOS app (recommended, no setup) or an Apple Shortcut (import link & setup in the guide).
+  description: Show your Apple Reminders grocery list on TRMNL. Feed it from the TRMNL Companion iOS app (recommended — quick in-app setup, no Shortcut to build) or an Apple Shortcut (import link & setup in the guide).
   github_url: https://github.com/vinaypamnani/trmnl-apple-groceries
   learn_more_url: https://github.com/vinaypamnani/trmnl-apple-groceries/blob/main/docs/apple-shortcut.md
 - keyname: list_source
   field_type: select
   # TRMNL submits the lowercased, underscored option label as the value
-  # (e.g. "Companion" -> "companion"); the layouts match on those slugs.
+  # (e.g. "TRMNL Companion" -> "trmnl_companion"); the conditional_validation
+  # below matches on those slugs. (Rendering ignores this field entirely.)
   options:
-    - "Companion"
-    - "Shortcut"
-  default: companion
+    - "TRMNL Companion"
+    - "Apple Shortcuts"
+  default: trmnl_companion
   name: List Source
-  description: Which source you use. This only tailors the fields below — the view itself auto-adapts to the data received (the Shortcut's payload adds the Completed column), and a footnote at the bottom of the screen always notes the detected source ("Data provided by …"). The Companion app needs no setup.
+  description: >-
+    Which source you use. This only tailors the fields below — the view itself
+    auto-adapts to the data received (the Shortcut's payload adds the Completed
+    column), and a footnote at the bottom of the screen always notes the
+    detected source ("Data provided by …"). TRMNL Companion setup: install the
+    TRMNL Companion iOS app, open its Plugins tab and pull to refresh, select
+    this plugin, grant Reminders permission, then toggle your grocery list on —
+    it syncs in the background, nothing else to build.
   conditional_validation:
-    - when: companion
+    - when: trmnl_companion
       hidden:
         - webhook_url
-    - when: shortcut
+    - when: apple_shortcuts
       hidden:
         - title_top
 - keyname: webhook_url
