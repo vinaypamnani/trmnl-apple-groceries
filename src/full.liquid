@@ -22,7 +22,7 @@
               <span class="g-box"></span>
             </div>
             <div class="content g-content">
-              <span class="title title--small g-name">{{ name }}</span>
+              <span class="title title--small lg:title--base g-name">{{ name }}</span>
               {% if note != blank %}
               <span class="description g-note">{{ note }}</span>
               {% endif %}
@@ -47,7 +47,7 @@
       <div class="item">
         <div class="meta"><span class="g-check"></span></div>
         <div class="content g-content">
-          <span class="title title--small text--muted g-done g-name">{{ item.title | default: item.t }}</span>
+          <span class="title title--small lg:title--base text--muted g-done g-name">{{ item.title | default: item.t }}</span>
         </div>
       </div>
       {% endfor %}

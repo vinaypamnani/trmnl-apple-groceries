@@ -1,7 +1,7 @@
 <div class="layout layout--col layout--top gap--medium g-scale-{{ font_size }}">
 
   <div class="columns g-half">
-    <div class="column g-top" data-list-limit="true" data-list-hidden-count="true">
+    <div class="column g-top">
       <div class="bg--backdrop p--1 text--center g-pill">
         {% assign pc = pending_items | size %}
         <span class="title title--small g-pill-text g-cart">{{ header_title }} · {{ pc }} item{% if pc != 1 %}s{% endif %}</span>
@@ -9,21 +9,25 @@
       {% if pending_items == empty %}
       <span class="description">All shopped!</span>
       {% else %}
-      {% for item in pending_items %}
-      {% assign name = item.title | default: item.t %}
-      {% assign note = item.notes | default: item.n %}
-      <div class="item">
-        <div class="meta">
-          <span class="g-box"></span>
-        </div>
-        <div class="content g-content">
-          <span class="title title--small g-name">{{ name }}</span>
-          {% if note != blank %}
-          <span class="description g-note">{{ note }}</span>
-          {% endif %}
+      <div class="columns" data-overflow-max-cols="1" data-overflow-max-cols-lg="2" data-overflow-counter="true">
+        <div class="column">
+          {% for item in pending_items %}
+          {% assign name = item.title | default: item.t %}
+          {% assign note = item.notes | default: item.n %}
+          <div class="item">
+            <div class="meta">
+              <span class="g-box"></span>
+            </div>
+            <div class="content g-content">
+              <span class="title title--small lg:title--base g-name">{{ name }}</span>
+              {% if note != blank %}
+              <span class="description g-note">{{ note }}</span>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
         </div>
       </div>
-      {% endfor %}
       {% endif %}
     </div>
   </div>
@@ -42,7 +46,7 @@
       <div class="item">
         <div class="meta"><span class="g-check"></span></div>
         <div class="content g-content">
-          <span class="title title--small text--muted g-done g-name">{{ item.title | default: item.t }}</span>
+          <span class="title title--small lg:title--base text--muted g-done g-name">{{ item.title | default: item.t }}</span>
         </div>
       </div>
       {% endfor %}

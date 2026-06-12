@@ -1,6 +1,6 @@
 <div class="layout layout--col layout--top g-scale-{{ font_size }}">
   <div class="columns g-cols">
-    <div class="column g-top" data-list-limit="true" data-list-hidden-count="true">
+    <div class="column g-top">
       <div class="bg--backdrop p--1 text--center g-pill">
         {% assign pc = pending_items | size %}
         <span class="title title--small g-pill-text g-cart">{{ header_title }} · {{ pc }} item{% if pc != 1 %}s{% endif %}</span>
@@ -8,19 +8,23 @@
       {% if pending_items == empty %}
       <span class="description">All shopped!</span>
       {% else %}
-      {% for item in pending_items %}
-      {% assign name = item.title | default: item.t %}
-      <div class="item">
-        <div class="meta"><span class="g-box"></span></div>
-        <div class="content g-content">
-          <span class="title title--small g-name">{{ name }}</span>
+      <div class="columns" data-overflow-max-cols="1" data-overflow-max-cols-lg="2" data-overflow-counter="true">
+        <div class="column">
+          {% for item in pending_items %}
+          {% assign name = item.title | default: item.t %}
+          <div class="item">
+            <div class="meta"><span class="g-box"></span></div>
+            <div class="content g-content">
+              <span class="title title--small lg:title--base g-name">{{ name }}</span>
+            </div>
+          </div>
+          {% endfor %}
         </div>
       </div>
-      {% endfor %}
       {% endif %}
     </div>
   </div>
-  <div class="description text--center p--1 g-footnote">Data provided by {{ source_label }}</div>
+  <div class="hidden lg:block description text--center p--1 g-footnote">Data provided by {{ source_label }}</div>
 </div>
 
 <div class="title_bar">
