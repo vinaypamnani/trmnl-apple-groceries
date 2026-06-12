@@ -48,9 +48,10 @@ source resolution: it sets `pending_items = reminders` always and toggles
 `item.notes | default: item.n`. **The view follows the data, not the setting:**
 `use_shortcut` (→ Completed column) is true when a `completed` array is present or
 items are `t`-keyed (`reminders.first.t`). `source_label` is the detected source
-("TRMNL Companion"/"Apple Shortcuts"); every layout renders it as a centered "Data
-provided by …" footnote (`.g-footnote`, italic) at the bottom of the content, just
-above the title bar. To make room, the content block (`.g-cols` / `.g-half`) flex-grows and
+("TRMNL Companion"/"Apple Shortcuts"); every layout **except `quadrant`** renders it
+as a centered "Data provided by …" footnote (`.g-footnote`, italic) at the bottom of
+the content, just above the title bar (`quadrant` omits it entirely — the quarter-screen
+has no room to spare). To make room, the content block (`.g-cols` / `.g-half`) flex-grows and
 the layout root is a `layout--col`. The **List Source** custom field
 (`list_source`, `companion` default / `shortcut`) does **not** affect rendering —
 it only tailors the settings form (see Conditional fields). The pending header
