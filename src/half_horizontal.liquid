@@ -11,11 +11,14 @@
       <span class="description">All shopped!</span>
       {% else %}
       {%- comment -%}
-        pb--4 reserves a line for the "and N more" label (otherwise the last column
-        packs flush and overflow:hidden clips it). Unconditional here: the half-height
-        Pending list overflows in BOTH sources, so the reservation is always wanted.
+        pb--4 reserves a line so the framework's "and N more" label isn't clipped by
+        the last column packing flush. Companion-only here (the 3-column view): in the
+        Shortcut view Pending is 2 columns beside Completed and the label already fits,
+        where adding the reservation suppresses the counter instead. (Mirror of `full`,
+        which needs the reservation in Shortcut and not Companion — the counter is
+        sensitive to each view's exact column geometry.)
       {%- endcomment -%}
-      <div class="columns gap--medium pb--4" data-overflow-max-cols="{% if show_completed %}2{% else %}3{% endif %}" data-overflow-counter="true">
+      <div class="columns gap--medium{% unless show_completed %} pb--4{% endunless %}" data-overflow-max-cols="{% if show_completed %}2{% else %}3{% endif %}" data-overflow-counter="true">
         <div class="column gap--small">
           {% for item in pending_items %}
           {% assign name = item.title | default: item.t %}
