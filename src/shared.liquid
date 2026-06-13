@@ -4,10 +4,10 @@ layout — do NOT add {% raw %}{% render "shared" %}{% endraw %}, that double-re
 Because it's prepended inline (not a `render`), the variables assigned in the
 {% raw %}{% liquid %}{% endraw %} block below are in scope for every layout body,
 so the source-detection + title-bar setup lives here once instead of in all four.
-Compound selectors (.column.g-*, .columns.g-*, .title.g-*) tie the TRMNL
+Compound selectors (.column.g-*, .columns.g-*, .description.g-*) tie the TRMNL
 framework's specificity and win on source order (this <style> loads after the
-framework CSS). Plain classes are used only for properties the framework leaves
-unset (line-clamp, min-width, etc.).
+framework CSS). Plain classes are used only for the few properties no framework
+utility covers well (line-clamp, min-width:0, italic, line-through, checkbox).
 {%- endcomment -%}
 {% liquid
 assign font_size = trmnl.plugin_settings.custom_fields_values.font_size | default: "large"
@@ -60,19 +60,43 @@ assign show_dt = false
 else
 assign show_dt = true
 endcase
+
+# Inline-SVG glyphs, defined once and reused by every layout. They use
+# stroke/fill "currentColor" so they follow the framework text colour and flip in
+# dark mode automatically (the same trick as the battery <svg>) — and being real
+# inline SVG, not CSS masks, they render through TRMNL's engine. The header glyphs
+# hold only the inner paths, so each layout sizes its own wrapping <svg> (cart's
+# path carries its heavier stroke; the wrapper's stroke-width is the bag default).
+assign cart_glyph = '<path d="M1 2h3.5l2.3 12.2a1.6 1.6 0 0 0 1.6 1.3h9.1a1.6 1.6 0 0 0 1.6-1.3L21.5 7H6" stroke-width="2.2"/><circle cx="9.5" cy="20" r="1.7" fill="currentColor" stroke="none"/><circle cx="18.5" cy="20" r="1.7" fill="currentColor" stroke="none"/>'
+assign bag_glyph = '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>'
+assign clock_svg = '<svg class="g-tbico" width="0.95em" height="0.95em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6 V12 H17"/></svg>'
 %}
 <style>
   /* layout sizing — g-cols grows to fill so the footnote can sit below it */
+  /* layout sizing — the content area grows to fill so the footnote sits below it,
+     and (crucially) gives each list column a BOUNDED height so the framework's
+     overflow system (data-overflow-*, "and N more") can detect overflow. The 2:1
+     Pending:Completed ratio comes from g-flex2 on Pending; Completed keeps the
+     framework default `flex: 1`. Grid `col--span` can't combine fixed spans with
+     the height-bounded columns the overflow engine needs. */
   .columns.g-cols { flex: 1 1 0; min-height: 0; align-items: stretch; }
-  .columns.g-half { flex: 1 1 0; min-height: 0; overflow: hidden; }
-  .column.g-top { justify-content: flex-start; }
+  /* .g-half: framework .columns already sets overflow:hidden, so we only add the
+     grow + min-height:0 the overflow engine needs. */
+  .columns.g-half { flex: 1 1 0; min-height: 0; }
+  /* min-height:0 lets these flex columns shrink below their content height (flex
+     items default to min-height:auto and won't). Without it the column expands to
+     fit all items, so the overflow engine reads the full content height as its
+     budget and never hides items / shows "and N more". */
+  .column.g-top { justify-content: flex-start; min-height: 0; }
   .column.g-flex2 { flex: 2 1 0; }
-  .column.g-flex1 { flex: 1 1 0; }
 
   /* item content fills the column so names use the full width */
   .g-content { flex: 1 1 0; min-width: 0; }
 
-  /* item name: a grocery item is one line — truncate the rest */
+  /* item name: a grocery item is one line — truncate the rest. CSS line-clamp, NOT
+     the framework Clamp engine (data-clamp): that measures the narrow overflow
+     sub-columns too conservatively and cuts names off early. width:100% makes the
+     box fill the column so it only truncates at the real edge. */
   .g-name {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -81,25 +105,17 @@ endcase
     width: 100%;
   }
   .g-done { text-decoration: line-through; }
-  /* notes read as clearly secondary — italic, crisp black (not a noisy gray dither) */
-  .description.g-note { word-break: normal; font-style: italic; }
+  /* shared italic: item notes read as secondary (crisp black, not a noisy gray
+     dither) and the "Data provided by …" footnote. No framework rule sets
+     font-style on .description, so a plain class wins without a compound selector. */
+  .g-italic { font-style: italic; }
 
   /* Apple logo in the title bar uses the framework's .image slot (see layouts) */
 
-  /* title-bar / header glyphs (clock, cart, bag) are MASKS filled with the
-     framework text colour, so they flip black->white in dark mode like the rest of
-     the UI. The battery is an inline <svg> using currentColor (adapts the same way).
-     One shared gap rule keeps the framework lint's style-count low. */
-  .g-ico-clock::before, .g-batt, .g-cart::before, .g-bag::before { margin-right: 0.3em; vertical-align: -0.12em; }
-  .g-ico-clock::before, .g-cart::before, .g-bag::before {
-    content: ""; display: inline-block; background: var(--framework-text-primary);
-    -webkit-mask: center / contain no-repeat var(--g-icon);
-    mask: center / contain no-repeat var(--g-icon);
-  }
-  .g-ico-clock::before { width: 0.95em; height: 0.95em; --g-icon: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTEyIDYgVjEyIEgxNyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg=="); }
-  .g-cart::before { width: 1.05em; height: 1.05em; --g-icon: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEgMmgzLjVsMi4zIDEyLjJhMS42IDEuNiAwIDAgMCAxLjYgMS4zaDkuMWExLjYgMS42IDAgMCAwIDEuNi0xLjNMMjEuNSA3SDYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxjaXJjbGUgY3g9IjkuNSIgY3k9IjIwIiByPSIxLjciIGZpbGw9IiMwMDAiLz48Y2lyY2xlIGN4PSIxOC41IiBjeT0iMjAiIHI9IjEuNyIgZmlsbD0iIzAwMCIvPjwvc3ZnPg=="); }
-  .g-bag::before { width: 1.05em; height: 1.05em; --g-icon: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTYgMkwzIDZ2MTRhMiAyIDAgMCAwIDIgMmgxNGEyIDIgMCAwIDAgMi0yVjZsLTMtNHoiLz48bGluZSB4MT0iMyIgeTE9IjYiIHgyPSIyMSIgeTI9IjYiLz48cGF0aCBkPSJNMTYgMTBhNCA0IDAgMCAxLTggMCIvPjwvc3ZnPg=="); }
-  .g-batt { display: inline-block; width: 1.6em; height: 0.9em; }
+  /* title-bar glyphs (clock, battery) are inline <svg>s using currentColor, so they
+     adapt to dark mode along with the text. This only sets their shared inline
+     alignment + spacing — each <svg> carries its own width/height. */
+  .g-tbico { display: inline-block; vertical-align: -0.15em; margin-right: 0.25em; }
 
   /* Checklist rows: the framework stretches .item and vertically-centers .meta,
      so on a two-line item (name + note) the checkbox floats to the middle. Pin
@@ -117,7 +133,7 @@ endcase
     display: inline-block;
     box-sizing: border-box;
     width: 0.8em; height: 0.8em;
-    border: 0.14em solid var(--framework-text-primary);
+    border: 0.14em solid currentColor;
     border-radius: 3px;
   }
   /* checked-off item: filled box + tick. Light = black box/white tick; dark mode
@@ -130,16 +146,6 @@ endcase
   .screen--dark-mode .g-check {
     background: center / contain no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHJlY3QgeD0iMSIgeT0iMSIgd2lkdGg9IjIyIiBoZWlnaHQ9IjIyIiByeD0iNSIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik02LjUgMTIuNWwzLjUgMy41IDctOCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIuNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+");
   }
-
-  /* header pill mirrors the footer (.title_bar) using the SAME framework vars, so it
-     adapts to dark/light identically: the gray-70 dither backdrop and the contrast-
-     aware text-stroke (paint-order stroke fill) both flip with the theme. */
-  .g-pill { border-radius: 8px; background: var(--bg-gray-70-color, transparent) var(--bg-gray-70-image, none) repeat center / var(--dither-bg-size, auto); }
-  .title.g-pill-text { -webkit-text-stroke: 2px var(--framework-stroke-contrast); paint-order: stroke fill; }
-
-  /* "Data provided by …" attribution footnote (centering/size come from framework
-     classes on the element; this only adds the italic note styling). */
-  .g-footnote { font-style: italic; }
 
   /* Font Size setting -> overall UI scale */
   .g-scale-regular { --ui-scale: 1; }

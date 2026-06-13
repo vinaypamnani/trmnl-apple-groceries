@@ -1,9 +1,10 @@
 <div class="layout layout--col layout--top g-scale-{{ font_size }}">
   <div class="columns g-cols">
     <div class="column g-top">
-      <div class="bg--backdrop p--1 text--center g-pill">
+      <div class="flex flex--row flex--center-x flex--center-y gap--small p--1 bg--gray-70 rounded">
         {% assign pc = pending_items | size %}
-        <span class="title title--small g-pill-text g-cart">{{ header_title }} · {{ pc }} item{% if pc != 1 %}s{% endif %}</span>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{{ cart_glyph }}</svg>
+        <span class="title title--small">{{ header_title }} · {{ pc }} item{% if pc != 1 %}s{% endif %}</span>
       </div>
       {% if pending_items == empty %}
       <span class="description">All shopped!</span>

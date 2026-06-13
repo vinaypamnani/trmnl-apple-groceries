@@ -1,10 +1,11 @@
 <div class="layout layout--col layout--top g-scale-{{ font_size }}">
   <div class="columns gap--medium g-cols">
 
-    <div class="column g-top {% if show_completed %}g-flex2{% else %}g-flex1{% endif %}">
-      <div class="bg--backdrop p--1 text--center g-pill">
+    <div class="column g-top {% if show_completed %}g-flex2{% endif %}">
+      <div class="flex flex--row flex--center-x flex--center-y gap--small p--1 bg--gray-70 rounded">
         {% assign pc = pending_items | size %}
-        <span class="title g-pill-text g-cart">{{ header_title }} · {{ pc }} item{% if pc != 1 %}s{% endif %}</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{{ cart_glyph }}</svg>
+        <span class="title">{{ header_title }} · {{ pc }} item{% if pc != 1 %}s{% endif %}</span>
       </div>
       {% if pending_items == empty %}
       <div class="flex flex--col h--56 lg:h--80 gap--space-between text--center">
@@ -12,7 +13,14 @@
         <span class="description lg:description--large">Nothing left to buy.</span>
       </div>
       {% else %}
-      <div class="columns gap--large" data-overflow-max-cols="{% if show_completed %}2{% else %}3{% endif %}" data-overflow-counter="true">
+      {%- comment -%}
+        pb--4 reserves a line so the framework's "and N more" label isn't clipped by
+        the last column packing flush. Only needed in the Shortcut view: there Pending
+        is 2 columns (narrower, beside Completed) and 40 items overflow. In Companion
+        Pending is full-width across 3 columns and the list fits, so reserving here
+        would shrink the budget and trigger a FALSE "and N more" with empty space.
+      {%- endcomment -%}
+      <div class="columns gap--large{% if show_completed %} pb--4{% endif %}" data-overflow-max-cols="{% if show_completed %}2{% else %}3{% endif %}" data-overflow-counter="true">
         <div class="column gap--medium">
           {% for item in pending_items %}
           {% assign name = item.title | default: item.t %}
@@ -24,7 +32,7 @@
             <div class="content g-content">
               <span class="title title--small lg:title--base g-name">{{ name }}</span>
               {% if note != blank %}
-              <span class="description g-note">{{ note }}</span>
+              <span class="description g-italic">{{ note }}</span>
               {% endif %}
             </div>
           </div>
@@ -35,34 +43,39 @@
     </div>
 
     {% if show_completed %}
-    <div class="column g-top g-flex1" data-list-limit="true" data-list-hidden-count="true">
-      <div class="bg--backdrop p--1 text--center g-pill">
+    <div class="column g-top">
+      <div class="flex flex--row flex--center-x flex--center-y gap--small p--1 bg--gray-70 rounded">
         {% assign cc = completed | size %}
-        <span class="title g-pill-text g-bag">Completed · {{ cc }} item{% if cc != 1 %}s{% endif %}</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{{ bag_glyph }}</svg>
+        <span class="title">Completed · {{ cc }} item{% if cc != 1 %}s{% endif %}</span>
       </div>
       {% if completed == empty %}
       <span class="description">Nothing in cart yet.</span>
       {% else %}
-      {% for item in completed %}
-      <div class="item">
-        <div class="meta"><span class="g-check"></span></div>
-        <div class="content g-content">
-          <span class="title title--small lg:title--base text--muted g-done g-name">{{ item.title | default: item.t }}</span>
+      <div class="columns" data-overflow-max-cols="1" data-overflow-counter="true">
+        <div class="column">
+          {% for item in completed %}
+          <div class="item">
+            <div class="meta"><span class="g-check"></span></div>
+            <div class="content g-content">
+              <span class="title title--small lg:title--base text--muted g-done g-name">{{ item.title | default: item.t }}</span>
+            </div>
+          </div>
+          {% endfor %}
         </div>
       </div>
-      {% endfor %}
       {% endif %}
     </div>
     {% endif %}
 
   </div>
-  <div class="description text--center p--1 g-footnote">Data provided by {{ source_label }}</div>
+  <div class="description text--center p--1 g-italic">Data provided by {{ source_label }}</div>
 </div>
 
 <div class="title_bar">
   <img class="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABZElEQVR4nN3XsUuXQRgH8I9aSUNIQRgJGa6OTYJDCOUQIS462eLYXxARDhG0FQaCg6CLUVCDcy4uioNLILQ0RA6pGS1FBhYvnPDyQvqev4c38AsP73DHfTju3rv3JS59eIAxDaUDT/Ebf/CoKXgugYc11AR6t4K+R1sT8EoJ/YEbTaBnSuv6Fbc1lHa8xkNciR78Mqawhm18wCwGSn0uYRJvU/seNvECvSdBR/C9snnK9RHr2D+iz0/cz0FHcXDEgLl1pw7ag2+B6ALO1oGfBaJLdd/rNmwFocXaX1cz1wJnuywjg4HwdA5883/B/YHwuxz4YiBcnONXc/BPgfirHHg+EC7qebrJjs14MFzUKrqPgzvTTRQJ7+BcnVk/CYYfq5kufAlCt9OdXTv3guCJHPQwiy2ib5ww5ytfktXb5zN+/aN9Axe0kM70p7CbdmdxKAynPwjpeQsv074oPpdmWkWduvwFRv+I7CEcSPAAAAAASUVORK5CYII=">
   <span class="title">{{ trmnl.plugin_settings.instance_name }}</span>
   {% if show_dt or show_batt or custom_text != blank %}
-  <span class="instance">{% if show_dt %}<span class="g-ico-clock"></span>{{ rt_dt }}{% endif %}{% if show_dt and show_batt %} · {% endif %}{% if show_batt %}<svg class="g-batt" viewBox="0 0 28 16"><rect x="1" y="2" width="22" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="24" y="5" width="3" height="6" rx="1" fill="currentColor"/><rect x="4" y="5" width="{{ batt_fill }}" height="6" fill="currentColor"/></svg>{{ batt_pct }}%{% endif %}{{ custom_text }}</span>
+  <span class="instance">{% if show_dt %}{{ clock_svg }}{{ rt_dt }}{% endif %}{% if show_dt and show_batt %} · {% endif %}{% if show_batt %}<svg class="g-tbico" width="1.6em" height="0.9em" viewBox="0 0 28 16"><rect x="1" y="2" width="22" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="24" y="5" width="3" height="6" rx="1" fill="currentColor"/><rect x="4" y="5" width="{{ batt_fill }}" height="6" fill="currentColor"/></svg>{{ batt_pct }}%{% endif %}{{ custom_text }}</span>
   {% endif %}
 </div>

@@ -57,8 +57,10 @@ the layout root is a `layout--col`. The **List Source** custom field
 it only tailors the settings form (see Conditional fields). The pending header
 reads `header_title` — the **Top
 Title** (`title_top`) when set, otherwise the list name (Companion) or "Pending"
-(Shortcut); `title_top` is **Companion-only**. The bottom bar's left is always the
-plugin's instance name. The four layouts share this setup via `shared.liquid`;
+(Shortcut); `title_top` is **Companion-only**. Each column header is a Framework
+`bg--gray-70 rounded` badge laid out as a `flex` row, prefixed with an inline
+`currentColor` SVG glyph — a cart for Pending, a bag for Completed (`quadrant` has
+Pending only). The bottom bar's left is always the plugin's instance name. The four layouts share this setup via `shared.liquid`;
 only their HTML bodies (and the duplicated footer markup) live per-file.
 
 **Conditional fields.** TRMNL select fields support `conditional_validation`
@@ -69,11 +71,14 @@ the form saves while hidden. This only affects the settings UI, not rendering.
 
 **Shared styles.** `src/shared.liquid` holds all CSS and is auto-prepended to each
 layout by trmnlp (do **not** add `{% render "shared" %}` — that double-renders).
-Convention: shared classes are prefixed `g-` (e.g. `.g-name`, `.g-pill`,
-`.g-scale-large`). Compound selectors like `.title.g-pill-text` are intentional —
+Convention: shared classes are prefixed `g-` (e.g. `.g-name`, `.g-note`,
+`.g-scale-large`). Compound selectors like `.description.g-note` are intentional —
 they raise specificity to beat the TRMNL framework CSS, which loads before this
-`<style>`. Plain `g-` classes cover only properties the framework leaves unset
-(line-clamp, min-width). Settings map to CSS vars: Font Size → `--ui-scale` via
+`<style>`. Plain `g-` classes cover only properties no framework utility provides
+well (line-clamp, min-width:0, italic, line-through, the custom checkbox).
+**Prefer Framework classes over custom CSS** — custom CSS
+(masks, `text-stroke`, etc.) can render in the browser preview yet break in TRMNL's
+server-side engine, so reach for `g-` styles only where no Framework utility fits. Settings map to CSS vars: Font Size → `--ui-scale` via
 `g-scale-*`. Item names always clamp to a single line (a grocery item is short).
 
 **Overflow.** Long lists rely on TRMNL framework data attributes —
@@ -96,5 +101,12 @@ they raise specificity to beat the TRMNL framework CSS, which loads before this
 - Webhook payloads must stay under TRMNL's **2 kB** limit (~45 to-buy + 15
   completed items at realistic name lengths ≈ 1.9 kB). Keep field names short on
   the Shortcut side (`t`/`n`).
-- Design for 1-bit e-ink: no color/grayscale, no animation. The outlined header
-  "pill" uses a multi-direction `text-shadow` to fake an outline in pure B/W.
+- Design for 1-bit e-ink: no color/grayscale, no animation.
+- Dark mode inverts the whole screen **except `<img>`/raster images**, which are
+  excluded. So icons that must flip with the theme are inline `<svg>`s using
+  `stroke="currentColor"`/`fill="currentColor"` (the color follows the framework
+  text color) — **not** `<img>` (which would need separate light/dark copies). The
+  battery, clock, and header cart/bag glyphs all use this. Item names truncate to
+  one line with CSS `-webkit-line-clamp` (`.g-name`), **not** the framework Clamp
+  engine (`data-clamp`) — that cut names off early inside the narrow overflow
+  sub-columns.
